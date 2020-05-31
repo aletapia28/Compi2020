@@ -90,6 +90,9 @@ import Triangle.AbstractSyntaxTrees.RepeatDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.RepeatDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.RepeatVarCommand;
 import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElseCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
+import Triangle.AbstractSyntaxTrees.NextCommand;
 
 public class Parser {
 
@@ -314,9 +317,21 @@ public class Parser {
         Declaration dAST = parseDeclaration();
         accept(Token.IN);
         Command cAST = parseCommand();
-        accept(TOKEN.END);
+        accept(Token.END);
         finish(commandPos);
         commandAST = new LetCommand(dAST, cAST, commandPos);
+      }
+      // restOfIf
+      case Token.IF:{
+        acceptIt();
+        Expression eAST = parseExpression();
+        accept(Token.THEN); 
+        Command cAST = parseCommand();
+        Command c2AST = parseRestOfIf();
+        finish(commandPos);
+        commandAST = new IfRCommand(eAST, cAST, c2AST, commandPos);
+       
+
       }
 
       // REPEAT WHILE DO END
@@ -330,12 +345,13 @@ public class Parser {
           case Token.WHILE: {
             acceptIt();
             Expression eAST = parseExpression();
-            accept(TOKEN.DO);
+            accept(Token.DO);
             Command cAST = parseCommand();
             accept(Token.END);
             finish(commandPos);
             commandAST = new RepeatWhileCommand(eAST, cAST, commandPos);
           }
+          break;
           // UNTIL DO END
           case Token.UNTIL: {
             acceptIt();
@@ -344,9 +360,10 @@ public class Parser {
             Command cAST = parseCommand();
             accept(Token.END);
             finish(commandPos);
-            // se puede reutilizar ?
             commandAST = new RepeatUntilCommand(eAST, cAST, commandPos);
           }
+          break;
+          //aqui habria que hacer un if en vez de 2 casos 
           //DO WHILE END
           case Token.DO: {
             acceptIt();
@@ -357,6 +374,7 @@ public class Parser {
             finish(commandPos);
             commandAST = new RepeatDoWhileCommand( cAST, eAST, commandPos);
           }
+          break;
            //DO WHILE UNTIL
            case Token.DO: {
             acceptIt();
@@ -367,6 +385,7 @@ public class Parser {
             finish(commandPos);
             commandAST = new RepeatDoUntilCommand( cAST, eAST, commandPos);
           }
+          break;
           // VAR IN TO DO END
           case Token.VAR: {
             // COMO HACERLO TERNARIO
@@ -382,45 +401,95 @@ public class Parser {
             finish(commandPos);
             commandAST = new RepeatVarCommand( iAST, e1AST, e2AST,cAST, commandPos);
           }
+          break;
+           // REPEAT LOOP
+          case Token.LOOP: {
+            acceptIt();
+            // if o switch?
+            switch(currentToken.kind){
+              case Token.IDENTIFIER:{
+                acceptIt();
+                Indentifier iAST = parseIdentifier();
+                accept(Token.DO);
+                Command cAST = parseCommand();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new LoopIdentifierCommand(iAST, cAST, commandPos); //hay que hacer el command 
+              }
+              break; 
+              case Token.NIL:{ // es token nil ?
+                acceptIt();
+                accept(Token.DO);
+                Command cAST = parseCommand();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new LoopCommand(cAST, commandPos); //hay que crearlo
 
-      //     // REPEAT LOOP
-      //     case Token.LOOP: {
-      //       acceptIt();
-      //       Indentifier iAST = parseIdentifier();
-      //       accept(Token.DO);
-      //       Command cAST = parseCommand();
-      //       accept(Token.END);
-      //       finish(commandPos);
-      //       commandAST = new RepeatLoopCommand( iAST, cAST, commandPos);
-      //     }
-      //   }
-      // }
+              }
+            }
+            break;
+          }
+        }
+      }
+        }
+        return CommandAST;
+      }
+         
 
-      // case Token.EXIT: {
-      //   acceptIt();
-      //   //Indentifier iAST = parseIdentifier();
-      //   finish(commandPos);
-      // //  commandAST = new ExitCommand(iAST,commandPos);
-      // }
+      case Token.EXIT: {
+        acceptIt();
+        switch(currentToken.kind){
+          case Token.IDENTIFIER:{
+          acceptIt();
+          Identifier iAST = parseIdentifier();
+          finish(commandPos);
+          //hay que crear exitCommand?
+          CommandAST = new ExitCommand(iAST,commandPos);
+          }
+          break;
+
+          case Token.NIL:{
+          acceptIt)();
+          finish(commandPos);
+          commandAST = new EmptyCommand(commandPos);
+          }
+          break;
+        }
+        
+
+        
+        
+      }
       
-      // case Token.NEXT: {
-      //   acceptIt();
-      //   //Indentifier iAST = parseIdentifier();
-      //   finish(commandPos);
-      //   //commandAST = new NextCommand(iAST,commandPos);
-      // }
+      case Token.NEXT: {
+        acceptIt();
+        switch(currentToken.kind){
+          case Token.IDENTIFIER:{
+          acceptIt();
+          Identifier iAST = parseIdentifier();
+          finish(commandPos);
+          //hay que crear nexCommand?
+          CommandAST = new NextCommand(iAST,commandPos);
+          }
+          break;
 
+          case Token.NIL:{
+          acceptIt)();
+          finish(commandPos);
+          commandAST = new EmptyCommand(commandPos);
+          }
+          break;
+        }
+        
+      }
+      break;
 
-      // case Token.RETURN: {
-      //   acceptIt();
-      //   //Indentifier iAST = parseIdentifier();
-      //   finish(commandPos);
-      //   //commandAST = new LetCommand(iAST,commandPos);
-      // }
-
-
-
-
+      case Token.RETURN: {
+        acceptIt();
+        finish(commandPos);
+        commandAST = new EmptyCommand(commandPos);
+      }
+      break;
 
       // case Token.BEGIN:
       // acceptIt();
@@ -480,6 +549,40 @@ public class Parser {
     }
 
     return commandAST;
+  }
+
+  Command parseRestOfIf() throws SyntaxError {
+    Command commandAST = null; // in case there's a syntactic error
+    SourcePosition commandPos = new SourcePosition();
+    start(commandPos);
+    commandAST = parseSingleCommand();
+    switch (currentToken.kind){
+    
+      //revisar la construccion del restofif, 
+      case Token.ELSE: {
+        acceptIt();
+        Command cAST = parseCommand();
+        accept(Token.END);
+        finish(commandPos);
+        commandAST = new RestOfIfElseCommand(cAST,commandPos);
+      }
+      break;
+
+      case Token.ELSIF:{
+        acceptIt();
+        Expression eAST = parseExpression();
+        accept(Token.THEN);
+        Command cAST = parseCommand();
+        Command c2AST = parseRestOfIf();
+        finish(commandPos);
+        CommandAST = new RestOfIfElsifCommand(eAST,cAST,c2AST, commandPos);
+      }
+      break;
+      
+
+    }
+    return commandAST;
+
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -723,7 +826,7 @@ public class Parser {
         Declaration d2AST = parseDeclaration();
         acceptIt(Token.END);
         finish(declarationPos);
-        // Hace falta un sequential linea 748
+        // Hace falta declaration, cual usamos
          break;
       }
       default:
@@ -731,8 +834,7 @@ public class Parser {
         
        
        }
-    
-
+       //deberiamos retornar algo?
   }
 
   Declaration parseDeclaration() throws SyntaxError {
@@ -877,7 +979,7 @@ public class Parser {
     Declaration declarationAST = null; // in case there's a syntactic error
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
-
+    //arreglar el while 
     while(currentToken.kind == Token.AND){
 
     Declaration p1AST = parseProcFunc();

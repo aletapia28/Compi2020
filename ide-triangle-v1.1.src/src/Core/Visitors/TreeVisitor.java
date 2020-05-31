@@ -76,6 +76,9 @@ import Triangle.AbstractSyntaxTrees.RepeatWhileCommand;
 import Triangle.AbstractSyntaxTrees.RepeatDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.RepeatDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.RepeatVarCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElseCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
+import Triangle.AbstractSyntaxTrees.NextCommand;
 //import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
 
 /**
@@ -141,6 +144,18 @@ public class TreeVisitor implements Visitor {
     public Object visitRepeatVarCommand(RepeatVarCommand ast, Object obj) {
         return (createQuaternary("Repeat Var", ast.I, ast.E1, ast.E2 ,ast.C));
     }
+
+    public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object obj) {
+        return (createUnary("Rest of If Else",ast.C));
+    }
+    public Object visitRestOfIfElsifCommand(RestOfIfElsifCommand ast, Object obj) {
+        return (createTernary("Rest of If Elsif",ast.E, ast.C,ast.C2));
+    }
+     public Object visitNextCommand(NextCommand ast, Object obj) {
+        return (createUnary("Next Command",ast.I));
+    }
+
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc=" Expressions ">
