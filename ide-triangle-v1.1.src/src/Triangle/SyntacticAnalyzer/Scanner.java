@@ -185,6 +185,58 @@ public final class Scanner {
     }
   }
 
+  public String getHtmlBuffer() {
+	  return htmlBuffer;
+  }
+  private void addHtmlReservedWord() {
+	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000><strong>"+htmlSpaces+currentSpelling.toString()+"</strong></FONT>";
+	  htmlSpaces = "";
+	  counter++;
+	  
+  }
+
+  private void addHtmlIdentifier() {
+	  String token = currentSpelling.toString();
+	  if(Token.isReservedWord(token)) {
+		  addHtmlReservedWord();
+	  }else {
+		  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000>"+htmlSpaces+token+"</FONT>";
+		  htmlSpaces = "";
+		  counter++;  
+	  }
+  }
+  
+  //agrega texto con formato para las literales
+  private void addHtmlLiteral() {
+	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000099>"+htmlSpaces+currentSpelling.toString()+"</FONT>";
+	  htmlSpaces = "";
+	  counter++;
+  }
+  private void addToHtmlComment(String newChar) {
+	  htmlBufferComment+=newChar;
+  }
+  //agrega texto con formato para las comentarios
+  private void addHtmlComment() {
+	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#008000>"+htmlSpaces+htmlBufferComment+"</FONT>";
+	  htmlBufferComment = "";
+	  htmlSpaces = "";
+	  counter++;
+  }
+  
+  //agrega los espacios que se van acumulando cuando se lee
+  private void addHtmlSpace() {
+	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000>"+htmlSpaces+currentSpelling.toString()+"</FONT>";
+	  htmlSpaces = "";
+	  counter++;
+  }
+  
+  //agrega el salto de linea al html
+  private void addHtmlJumpLine() {
+	  htmlBuffer+="<br/>";
+	  htmlSpaces = "";
+	  counter++;
+  }
+
   public Token scan () {
     Token tok;
     SourcePosition pos;
