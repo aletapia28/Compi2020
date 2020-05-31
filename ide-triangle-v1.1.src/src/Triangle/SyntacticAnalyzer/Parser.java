@@ -309,7 +309,7 @@ public class Parser {
       }
 
       // LET IN END
-      case Token.LET: {
+       case Token.LET: {
         acceptIt();
         Declaration dAST = parseDeclaration();
         accept(Token.IN);
@@ -369,6 +369,7 @@ public class Parser {
           }
           // VAR IN TO DO END
           case Token.VAR: {
+            // COMO HACERLO TERNARIO
             acceptIt();
             Indentifier iAST = parseIdentifier();
             accept(Token.IN);
@@ -701,16 +702,48 @@ public class Parser {
   //
   ///////////////////////////////////////////////////////////////////////////////
 
+  Declaration parseCompoundDeclaration() throws SyntaxError {
+    Declaration declarationAST = null; // in case there's a syntactic error
+    SourcePosition declarationPos = new SourcePosition();
+    start(declarationPos);
+
+       switch (currentToken.kind) {
+
+      case Token.REC: {
+        acceptIt();
+        declarationAST = parseProcFuncs(); 
+        accept(Token.END);
+        finish(declarationPos);
+        break;
+      }
+      case Token.PRIVATE: {
+        acceptIt();
+        Declaration d1AST = parseDeclaration();
+        acceptIt(Token.IN);
+        Declaration d2AST = parseDeclaration();
+        acceptIt(Token.END);
+        finish(declarationPos);
+        // Hace falta un sequential linea 748
+         break;
+      }
+      default:
+          declarationAST = parseSingleCommand();
+        
+       
+       }
+    
+
+  }
 
   Declaration parseDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
 
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
-    declarationAST = parseSingleDeclaration();
+    declarationAST = parseCompoundDeclaration();
     while (currentToken.kind == Token.SEMICOLON) {
       acceptIt();
-      Declaration d2AST = parseSingleDeclaration();
+      Declaration d2AST = parseDeclaration();  // Aqui hay que cambiarlo ??? para que sea recursivo?
       finish(declarationPos);
       declarationAST = new SequentialDeclaration(declarationAST, d2AST, declarationPos);
     }
@@ -735,6 +768,7 @@ public class Parser {
       }
         break;
 
+      // HAY QUE HACER OTRO TOKEN.VAR O SE MODIFICA ESTE 
       case Token.VAR: {
         acceptIt();
         Identifier iAST = parseIdentifier();
@@ -752,9 +786,8 @@ public class Parser {
         FormalParameterSequence fpsAST = parseFormalParameterSequence();
         accept(Token.RPAREN);
         accept(Token.IS);
-        
-        Command cAST = parseSingleCommand(); // parseCommand
-        //accept(Token.END);
+        command cAST = parseCommand();
+        accept(Token.END)
         finish(declarationPos);
         declarationAST = new ProcDeclaration(iAST, fpsAST, cAST, declarationPos);
       }
@@ -792,6 +825,74 @@ public class Parser {
     }
     return declarationAST;
   }
+
+
+//FUNC Y PROC DE SINGLE DECLATION YA NO SE USAN??
+  Declaration parseProcFunc() throws SyntaxError {
+    Declaration declarationAST = null; // in case there's a syntactic error
+
+    SourcePosition declarationPos = new SourcePosition();
+    start(declarationPos);
+
+    switch (currentToken.kind) {
+
+      case Token.PROC: {
+        acceptIt();
+        Identifier iAST = parseIdentifier();
+        accept(Token.LPAREN);
+        FormalParameterSequence fAST = parseFormalParameterSequence();
+        accept(Token.RPAREN);
+        accept(Token.IS);
+        Command cAST = parseCommand();
+        accept(Token.END);
+        finish(declarationPos);
+        declarationAST = new ProcDeclaration(iAST, fAST, cAST, declarationPos); //
+      }
+        break;
+
+      case Token.FUNC: {
+        acceptIt();
+        Identifier iAST = parseIdentifier();
+        accept(Token.LPAREN);
+        FormalParameterSequence fAST = parseFormalParameterSequence();
+        accept(Token.RPAREN);
+        accept(Token.COLON);
+        TypeDenoter tAST = parseTypeDenoter();
+        accept(TOKEN.IS);
+        Expression eAST = parseExpression();
+        finish(declarationPos);
+        declarationAST = new  FuncDeclaration(iAST, fAST, tAST, eAST, declarationPos);
+      }
+        break;
+
+      default:
+        syntacticError("\"%\" cannot start a declaration", currentToken.spelling);
+        break;
+
+    }
+    return declarationAST;
+  }
+
+  Declaration parseProcFuncs() throws SyntaxError {
+    Declaration declarationAST = null; // in case there's a syntactic error
+    SourcePosition declarationPos = new SourcePosition();
+    start(declarationPos);
+
+    while(currentToken.kind == Token.AND){
+
+    Declaration p1AST = parseProcFunc();
+    accept(Token.AND);
+    Declaration p2AST = parseProcFunc();
+    finish(declarationPos);
+    
+    declarationAST = new Declaration (p1AST, p2AST, declarationPos ); /// new que? 
+
+    }
+
+    return declarationAST;
+  }
+
+
 
   ///////////////////////////////////////////////////////////////////////////////
   //

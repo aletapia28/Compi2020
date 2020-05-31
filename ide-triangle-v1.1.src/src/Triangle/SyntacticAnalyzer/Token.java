@@ -96,7 +96,7 @@ final class Token extends Object {
     VAR			= 29,
     WHILE =   30,
 
-    // punctuat 31ion...
+    // punctuation...
     DOT			  = 31,
     COLON		  = 32,
     SEMICOLON	= 33,

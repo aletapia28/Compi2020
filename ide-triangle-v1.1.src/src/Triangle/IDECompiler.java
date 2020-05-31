@@ -98,3 +98,7 @@ public class IDECompiler {
     private IDEReporter report;     // Our ErrorReporter class.
     // </editor-fold>
 }
+
+
+
+
