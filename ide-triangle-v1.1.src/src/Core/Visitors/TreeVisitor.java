@@ -138,7 +138,7 @@ public class TreeVisitor implements Visitor {
     public Object visitRepeatDoUntilCommand(RepeatDoUntilCommand ast, Object obj) {
         return (createBinary("Repeat Do Until Command", ast.E, ast.C));
     }
-    public Object RepeatVarCommand(RepeatVarCommand ast, Object obj) {
+    public Object visitRepeatVarCommand(RepeatVarCommand ast, Object obj) {
         return (createQuaternary("Repeat Var", ast.I, ast.E1, ast.E2 ,ast.C));
     }
     // </editor-fold>
