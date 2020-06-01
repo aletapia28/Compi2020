@@ -83,6 +83,9 @@ import Triangle.AbstractSyntaxTrees.RepeatWhileCommand;
 import Triangle.AbstractSyntaxTrees.RepeatDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.RepeatDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.RepeatVarCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElseCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
+import Triangle.AbstractSyntaxTrees.NextCommand;
 //import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
 
 
@@ -183,6 +186,26 @@ public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
     
     return(null);
 }
+public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object o) { 
+    ast.C.visit(this,null);
+    
+    return(null);
+}
+
+public Object visitRestOfIfElsifCommand(RestOfIfElsifCommand ast, Object o) { 
+    ast.E.visit(this,null);
+    ast.C.visit(this,null); 
+    ast.C2.visit(this,null);
+    return(null);
+}
+
+public Object visitNextCommand(NextCommand ast, Object o) { 
+    ast.I.visit(this,null);
+    return(null);
+}
+
+
+
   // </editor-fold>
 
   // <editor-fold defaultstate="collapsed" desc=" Expressions ">
