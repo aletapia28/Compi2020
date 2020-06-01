@@ -727,12 +727,8 @@ public class Parser {
          break;
       }
       default:
-          declarationAST = parseSingleCommand();
-        
-       
-       }
-    
-
+          declarationAST = parseSingleCommand();      
+      }
   }
 
   Declaration parseDeclaration() throws SyntaxError {
