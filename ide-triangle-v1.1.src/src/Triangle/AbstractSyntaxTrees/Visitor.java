@@ -29,6 +29,9 @@ public interface Visitor {
   public abstract Object visitRepeatDoWhileCommand (RepeatDoWhileCommand ast, Object o);
   public abstract Object visitRepeatDoUntilCommand (RepeatDoUntilCommand ast, Object o);
   public abstract Object visitRepeatVarCommand (RepeatVarCommand ast, Object o);
+  public abstract Object visitRestOfIfElseCommand (RestOfIfElseCommand ast, Object o);
+  public abstract Object visitRestOfIfElsifCommand (RestOfIfElsifCommand ast, Object o);
+  public abstract Object visitNextCommand (NextCommand ast, Object o);
 
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);

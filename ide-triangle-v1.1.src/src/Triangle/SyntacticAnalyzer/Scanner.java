@@ -70,15 +70,31 @@ public final class Scanner {
     case '!':
       {
         takeIt();
+        addToHtmlComment(String.valueOf(currentChar));
         while ((currentChar != SourceFile.EOL) && (currentChar != SourceFile.EOT))
           takeIt();
+          addToHtmlComment(String.valueOf(currentChar));
         if (currentChar == SourceFile.EOL)
           takeIt();
+          addHtmlJumpLine();
       }
       break;
 
-    case ' ': case '\n': case '\r': case '\t':
+    case ' ': 
       takeIt();
+      htmlSpaces+="&nbsp;";
+      break;
+    case '\n':
+      takeIt();
+      addHtmlJumpLine();
+      break;
+    case '\r':
+      takeIt();
+      addHtmlSpace();
+      break;
+    case '\t':
+      takeIt();
+      addHtmlTab();
       break;
     }
   }
@@ -102,6 +118,7 @@ public final class Scanner {
       takeIt();
       while (isLetter(currentChar) || isDigit(currentChar))
         takeIt();
+      addHtmlIdentifier();
       return Token.IDENTIFIER;
 
     case '0':  case '1':  case '2':  case '3':  case '4':
@@ -109,6 +126,7 @@ public final class Scanner {
       takeIt();
       while (isDigit(currentChar))
         takeIt();
+      addHtmlLiteral();
       return Token.INTLITERAL;
 
     case '+':  case '-':  case '*': case '/':  case '=':
@@ -117,13 +135,15 @@ public final class Scanner {
       takeIt();
       while (isOperator(currentChar))
         takeIt();
+      addHtmlIdentifier();
       return Token.OPERATOR;
 
     case '\'':
       takeIt();
       takeIt(); // the quoted character
       if (currentChar == '\'') {
-      	takeIt();
+        takeIt();
+        addHtmlLiteral();
         return Token.CHARLITERAL;
       } else
         return Token.ERROR;
@@ -142,38 +162,47 @@ public final class Scanner {
 
     case ';':
       takeIt();
+      addHtmlIdentifier();
       return Token.SEMICOLON;
 
     case ',':
       takeIt();
+      addHtmlIdentifier();
       return Token.COMMA;
 
     case '~':
       takeIt();
+      addHtmlIdentifier();
       return Token.IS;
 
     case '(':
       takeIt();
+      addHtmlIdentifier();
       return Token.LPAREN;
 
     case ')':
       takeIt();
+      addHtmlIdentifier();
       return Token.RPAREN;
 
     case '[':
       takeIt();
+      addHtmlIdentifier();
       return Token.LBRACKET;
 
     case ']':
       takeIt();
+      addHtmlIdentifier();
       return Token.RBRACKET;
 
     case '{':
       takeIt();
+      addHtmlIdentifier();
       return Token.LCURLY;
 
     case '}':
       takeIt();
+      addHtmlIdentifier();
       return Token.RCURLY;
 
     case SourceFile.EOT:
@@ -188,6 +217,7 @@ public final class Scanner {
   public String getHtmlBuffer() {
 	  return htmlBuffer;
   }
+
   private void addHtmlReservedWord() {
 	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000><strong>"+htmlSpaces+currentSpelling.toString()+"</strong></FONT>";
 	  htmlSpaces = "";
@@ -206,16 +236,16 @@ public final class Scanner {
 	  }
   }
   
-  //agrega texto con formato para las literales
   private void addHtmlLiteral() {
 	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000099>"+htmlSpaces+currentSpelling.toString()+"</FONT>";
 	  htmlSpaces = "";
 	  counter++;
   }
+  
   private void addToHtmlComment(String newChar) {
 	  htmlBufferComment+=newChar;
   }
-  //agrega texto con formato para las comentarios
+  
   private void addHtmlComment() {
 	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#008000>"+htmlSpaces+htmlBufferComment+"</FONT>";
 	  htmlBufferComment = "";
@@ -223,18 +253,20 @@ public final class Scanner {
 	  counter++;
   }
   
-  //agrega los espacios que se van acumulando cuando se lee
   private void addHtmlSpace() {
 	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000>"+htmlSpaces+currentSpelling.toString()+"</FONT>";
 	  htmlSpaces = "";
 	  counter++;
   }
   
-  //agrega el salto de linea al html
   private void addHtmlJumpLine() {
 	  htmlBuffer+="<br/>";
 	  htmlSpaces = "";
 	  counter++;
+  }
+
+  private void addHtmlTab() {
+	  htmlBuffer+="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
   }
 
   public Token scan () {
