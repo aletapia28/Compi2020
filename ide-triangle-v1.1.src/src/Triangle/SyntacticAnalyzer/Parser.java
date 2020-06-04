@@ -444,7 +444,7 @@ public class Parser {
           Identifier iAST = parseIdentifier();
           finish(commandPos);
           //hay que crear exitCommand?
-          CommandAST = new ExitCommand(iAST,commandPos);
+          CommandAST = new ExitCommand(iAST,commandPos); // hay alguno que sea para esta
           }
           break;
 
@@ -484,6 +484,7 @@ public class Parser {
       }
       break;
 
+      // Solo hay que aceptarlo y ya
       case Token.RETURN: {
         acceptIt();
         finish(commandPos);
@@ -555,7 +556,7 @@ public class Parser {
     Command commandAST = null; // in case there's a syntactic error
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
-    commandAST = parseSingleCommand();
+    //commandAST = parseSingleCommand();
     switch (currentToken.kind){
     
       //revisar la construccion del restofif, 
@@ -563,8 +564,9 @@ public class Parser {
         acceptIt();
         Command cAST = parseCommand();
         accept(Token.END);
-        finish(commandPos);
-        commandAST = new RestOfIfElseCommand(cAST,commandPos);
+        //finish(commandPos);
+        // commandAST = new RestOfIfElseCommand(cAST,commandPos);
+        commadnAST = cAST;
       }
       break;
 
@@ -575,12 +577,13 @@ public class Parser {
         Command cAST = parseCommand();
         Command c2AST = parseRestOfIf();
         finish(commandPos);
-        CommandAST = new RestOfIfElsifCommand(eAST,cAST,c2AST, commandPos);
+        CommandAST = new RestOfIfElsifCommand(eAST,cAST,c2AST, commandPos);//new if commadno(e,c,c2)
       }
       break;
       
 
     }
+    //default
     return commandAST;
 
   }
@@ -826,7 +829,7 @@ public class Parser {
         Declaration d2AST = parseDeclaration();
         acceptIt(Token.END);
         finish(declarationPos);
-        // Hace falta declaration, cual usamos
+        // Hace falta declaration, Hay que crear uno nuevo();
          break;
       }
       default:
@@ -845,7 +848,7 @@ public class Parser {
     declarationAST = parseCompoundDeclaration();
     while (currentToken.kind == Token.SEMICOLON) {
       acceptIt();
-      Declaration d2AST = parseDeclaration();  // Aqui hay que cambiarlo ??? para que sea recursivo?
+      Declaration d2AST = parseDeclaration();  // Aqui hay que cambiarlo ??? para que sea recursivo? 
       finish(declarationPos);
       declarationAST = new SequentialDeclaration(declarationAST, d2AST, declarationPos);
     }
@@ -988,6 +991,7 @@ public class Parser {
     finish(declarationPos);
     
     declarationAST = new Declaration (p1AST, p2AST, declarationPos ); /// new que? 
+    // SequentialDeclaration
 
     }
 
