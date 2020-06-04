@@ -405,8 +405,9 @@ public class Parser {
             accept(Token.DO);
             Command cAST = parseCommand();
             accept(Token.END);
+            Declaration cVarDeclaration = new InExVarDeclaration(iAST,e1AST); //crear 
             finish(commandPos);
-            commandAST = new RepeatVarCommand( iAST, e1AST, e2AST,cAST, commandPos);
+            commandAST = new RepeatVarCommand( cVarDeclaration, e2AST,cAST, commandPos); //pasarlo de quat a ternario
           }
           break;
            // REPEAT LOOP
@@ -449,9 +450,8 @@ public class Parser {
           case Token.IDENTIFIER:{
           acceptIt();
           Identifier iAST = parseIdentifier();
-          finish(commandPos);
-          //hay que crear exitCommand?
-          CommandAST = new ExitCommand(iAST,commandPos);
+          finish(commandPos); 
+          CommandAST = new ExitCommand(iAST,commandPos); // crearlo ?
           }
           break;
 
@@ -475,8 +475,7 @@ public class Parser {
           acceptIt();
           Identifier iAST = parseIdentifier();
           finish(commandPos);
-          //hay que crear nexCommand?
-          CommandAST = new NextCommand(iAST,commandPos);
+          CommandAST = new NextCommand(iAST,commandPos); //crearlo?
           }
           break;
 
@@ -490,11 +489,10 @@ public class Parser {
         
       }
       break;
-      //que hace el returnn?
       case Token.RETURN: {
         acceptIt();
         finish(commandPos);
-        commandAST = new EmptyCommand(commandPos);
+        commandAST = new EmptyCommand(commandPos); //crearlo?
       }
       break;
 
@@ -570,8 +568,9 @@ public class Parser {
         acceptIt();
         Command cAST = parseCommand();
         accept(Token.END);
-        finish(commandPos);
-        commandAST = new RestOfIfElseCommand(cAST,commandPos);
+        //finish(commandPos);
+        //commandAST = new RestOfIfElseCommand(cAST,commandPos);
+        commandAST = cAST;
       }
       break;
 
@@ -582,7 +581,7 @@ public class Parser {
         Command cAST = parseCommand();
         Command c2AST = parseRestOfIf();
         finish(commandPos);
-        CommandAST = new RestOfIfElsifCommand(eAST,cAST,c2AST, commandPos);
+        commandAST = new IfCommand(eAST,cAST,c2AST, commandPos); //revisarlo 
       }
       break;
       
@@ -618,7 +617,7 @@ public class Parser {
         break;
 
       case Token.IF: {
-        acceptIt();
+        acceptIt(); 
         Expression e1AST = parseExpression();
         accept(Token.THEN);
         Expression e2AST = parseExpression();
@@ -841,12 +840,11 @@ public class Parser {
         
        
        }
-       //deberiamos retornar algo?
+       return declarationAST; //revisar return 
   }
 
   Declaration parseDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
-
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     declarationAST = parseCompoundDeclaration();
@@ -877,7 +875,7 @@ public class Parser {
       }
         break;
 
-      // HAY QUE HACER OTRO TOKEN.VAR O SE MODIFICA ESTE 
+      // HAY QUE HACER un switch para ; o ~
       case Token.VAR: {
         acceptIt();
         Identifier iAST = parseIdentifier();
@@ -987,7 +985,7 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
 
-    //arreglar el while 
+    //arreglar el while - hacerlo con un switch, arreglar default (referencia linea 976)
     while(currentToken.kind == Token.AND){
 
     Declaration p1AST = parseProcFunc();
@@ -995,7 +993,7 @@ public class Parser {
     Declaration p2AST = parseProcFunc();
     finish(declarationPos);
     
-    declarationAST = new Declaration (p1AST, p2AST, declarationPos ); /// new que? 
+    declarationAST = new ProcFuncDeclaration (p1AST, p2AST, declarationPos ); /// hay que crearlo, debe ser como el sequential
 
     }
 
