@@ -205,7 +205,7 @@ public class Parser {
 
     if (currentToken.kind == Token.CHARLITERAL) {
       previousTokenPosition = currentToken.position;
-      String spelling = currentToken.spelling;
+      String spelling = currentspelling;
       CL = new CharacterLiteral(spelling, previousTokenPosition);
       currentToken = lexicalAnalyser.scan();
     } else {
@@ -363,29 +363,36 @@ public class Parser {
             commandAST = new RepeatUntilCommand(eAST, cAST, commandPos);
           }
           break;
-          //aqui habria que hacer un if en vez de 2 casos 
           //DO WHILE END
+
           case Token.DO: {
             acceptIt();
             Command cAST = parseCommand();
-            accept(Token.WHILE);
-            Expression eAST = parseExpression();
-            accept(Token.END);
-            finish(commandPos);
-            commandAST = new RepeatDoWhileCommand( cAST, eAST, commandPos);
+            switch (currentToken.kind) {
+              
+              case Token.WHILE: {
+                acceptIt();
+                Expression eAST = parseExpression();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new RepeatDoWhileCommand( cAST, eAST, commandPos);
+
+              }
+              //DO  UNTIL END
+              case Token.UNTIL: {
+                acceptIt();
+                Expression eAST = parseExpression();
+                accept(Token.END);
+                finish(commandPos);
+                commandAST = new RepeatDoUntilCommand( cAST, eAST, commandPos);
+            }
+            break;
+
+            }
+            
           }
           break;
-           //DO WHILE UNTIL
-           case Token.DO: {
-            acceptIt();
-            Command cAST = parseCommand();
-            accept(Token.UNTIL);
-            Expression eAST = parseExpression();
-            accept(Token.END);
-            finish(commandPos);
-            commandAST = new RepeatDoUntilCommand( cAST, eAST, commandPos);
-          }
-          break;
+           
           // VAR IN TO DO END
           case Token.VAR: {
             // COMO HACERLO TERNARIO
@@ -485,6 +492,7 @@ public class Parser {
       break;
 
       // Solo hay que aceptarlo y ya
+      //que hace el returnn?
       case Token.RETURN: {
         acceptIt();
         finish(commandPos);
@@ -982,6 +990,7 @@ public class Parser {
     Declaration declarationAST = null; // in case there's a syntactic error
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
+
     //arreglar el while 
     while(currentToken.kind == Token.AND){
 
