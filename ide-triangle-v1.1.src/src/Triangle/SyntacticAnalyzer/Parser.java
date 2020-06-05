@@ -442,8 +442,6 @@ public class Parser {
         }
         return CommandAST;
       }
-         
-
       case Token.EXIT: {
         acceptIt();
         if (Token.kind == Token.IDENTIFIER){
@@ -454,8 +452,6 @@ public class Parser {
         else{
           Identifier iAST = anonymousIdentifier(); //hay que crearlo
         }
-        
-        
         
       }
       
@@ -946,9 +942,8 @@ public class Parser {
         accept(Token.END);
         finish(declarationPos);
         declarationAST = new ProcDeclaration(iAST, fAST, cAST, declarationPos); //
-      }
         break;
-
+      }
       case Token.FUNC: {
         acceptIt();
         Identifier iAST = parseIdentifier();
@@ -961,9 +956,9 @@ public class Parser {
         Expression eAST = parseExpression();
         finish(declarationPos);
         declarationAST = new  FuncDeclaration(iAST, fAST, tAST, eAST, declarationPos);
+         break;
       }
-        break;
-
+       
       default:
         syntacticError("\"%\" cannot start a declaration", currentToken.spelling);
         break;
@@ -978,16 +973,22 @@ public class Parser {
     start(declarationPos);
 
     //arreglar el while - hacerlo con un switch, arreglar default (referencia linea 976)
-    while(currentToken.kind == Token.AND){
-
-    Declaration p1AST = parseProcFunc();
-    accept(Token.AND);
-    Declaration p2AST = parseProcFunc();
-    finish(declarationPos);
-    
-    declarationAST = new ProcFuncDeclaration (p1AST, p2AST, declarationPos ); /// hay que crearlo, debe ser como el sequential
-
+    do{
+     
+      Declaration p1AST = parseProcFunc();
+       if(currentToken.kind == Token.AND){
+         acceptIt(;
+        Declaration p2AST = parseProcFunc();
+        finish(declarationPos);
+        declarationAST = new ProcFuncDeclaration (p1AST, p2AST, declarationPos ); /// hay que crearlo, debe ser como el sequential
+        return declarationAST;
+       }
+      
     }
+    while(currentToken.kind == Token.AND);
+    default:
+        syntacticError("\"%\" cannot start a declaration", currentToken.spelling);
+        break;
 
     return declarationAST;
   }
