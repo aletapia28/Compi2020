@@ -551,7 +551,7 @@ public class Parser {
     Command commandAST = null; // in case there's a syntactic error
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
-    commandAST = parseSingleCommand();
+    //commandAST = parseSingleCommand();
     switch (currentToken.kind){
     
       //revisar la construccion del restofif, 
@@ -578,6 +578,7 @@ public class Parser {
       
 
     }
+    //default
     return commandAST;
 
   }
@@ -823,7 +824,7 @@ public class Parser {
         Declaration d2AST = parseDeclaration();
         acceptIt(Token.END);
         finish(declarationPos);
-        // Hace falta declaration, cual usamos
+        // Hace falta declaration, Hay que crear uno nuevo();
          break;
       }
       default:
@@ -841,7 +842,7 @@ public class Parser {
     declarationAST = parseCompoundDeclaration();
     while (currentToken.kind == Token.SEMICOLON) {
       acceptIt();
-      Declaration d2AST = parseDeclaration();  // Aqui hay que cambiarlo ??? para que sea recursivo?
+      Declaration d2AST = parseDeclaration();  // Aqui hay que cambiarlo ??? para que sea recursivo? 
       finish(declarationPos);
       declarationAST = new SequentialDeclaration(declarationAST, d2AST, declarationPos);
     }
