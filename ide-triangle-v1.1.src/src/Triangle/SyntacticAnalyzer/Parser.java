@@ -446,24 +446,15 @@ public class Parser {
 
       case Token.EXIT: {
         acceptIt();
-        switch(currentToken.kind){
-          case Token.IDENTIFIER:{
+        if (Token.kind == Token.IDENTIFIER){
           acceptIt();
           Identifier iAST = parseIdentifier();
-          finish(commandPos); 
-          CommandAST = new ExitCommand(iAST,commandPos); // crearlo ?
-          }
-          break;
-
-          case Token.NIL:{
-          acceptIt)();
           finish(commandPos);
-          commandAST = new EmptyCommand(commandPos);
-          }
-          break;
+        }
+        else{
+          Identifier iAST = anonymousIdentifier(); //hay que crearlo
         }
         
-
         
         
       }
