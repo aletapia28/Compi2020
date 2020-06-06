@@ -313,6 +313,7 @@ public class Parser {
         finish(commandPos);
         commandAST = new EmptyCommand(commandPos);
         break;
+        
       }
 
       // LET IN END
@@ -324,7 +325,9 @@ public class Parser {
         accept(Token.END);
         finish(commandPos);
         commandAST = new LetCommand(dAST, cAST, commandPos);
+        // break;
       }
+      break;
       // restOfIf
       case Token.IF:{
         acceptIt();
@@ -334,6 +337,7 @@ public class Parser {
         Command c2AST = parseRestOfIf();
         finish(commandPos);
         commandAST = new IfCommand(eAST, cAST, c2AST, commandPos);
+        break;
        
 
       }
@@ -353,8 +357,9 @@ public class Parser {
             accept(Token.END);
             finish(commandPos);
             commandAST = new RepeatWhileCommand(eAST, cAST, commandPos);
+            break;
           }
-          break;
+
           // UNTIL DO END
           case Token.UNTIL: {
             acceptIt();
@@ -379,6 +384,7 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new RepeatDoWhileCommand( cAST, eAST, commandPos);
+                break;
 
               }
               //DO  UNTIL END
@@ -388,8 +394,9 @@ public class Parser {
                 accept(Token.END);
                 finish(commandPos);
                 commandAST = new RepeatDoUntilCommand( cAST, eAST, commandPos);
+                break;
             }
-            break;
+           
 
             }
             
@@ -411,8 +418,9 @@ public class Parser {
             Declaration cVarDeclaration = new InExVarDeclaration(iAST,e1AST,commandPos);  
             finish(commandPos);
             commandAST = new RepeatVarCommand( cVarDeclaration, e2AST,cAST, commandPos); 
+            break;
           }
-          break;
+          
            // REPEAT LOOP
         //   case Token.LOOP: {
         //     acceptIt();
@@ -445,6 +453,7 @@ public class Parser {
           acceptIt();
           Identifier iAST = parseIdentifier();
           finish(commandPos);
+          break;
         }
         else{
           break;
@@ -461,15 +470,17 @@ public class Parser {
           Identifier iAST = parseIdentifier();
           finish(commandPos);
           commandAST = new NextCommand(iAST,commandPos); 
-          }
           break;
+          }
+       
 
-          case Token.NIL:{
-          acceptIt();
-          finish(commandPos);
-          commandAST = new EmptyCommand(commandPos);
-          }
-          break;
+          // case Token.NIL:{
+          // acceptIt();
+          // finish(commandPos);
+          // commandAST = new EmptyCommand(commandPos);
+          // break;
+          // }
+       
         }
         
       }
@@ -478,9 +489,9 @@ public class Parser {
         acceptIt();
         finish(commandPos);
         commandAST = new EmptyCommand(commandPos); 
+        break;
       }
-      break;
-
+      
       // case Token.BEGIN:
       // acceptIt();
       // commandAST = parseCommand();
@@ -802,6 +813,7 @@ public class Parser {
     start(declarationPos);
 
     switch (currentToken.kind) {
+      
       case Token.REC: {
         acceptIt();
         declarationAST = parseProcFuncs();

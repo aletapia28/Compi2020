@@ -1,7 +1,8 @@
-!Test let type declaration
-
-let
-  type t ~ Integer
-in
-  y := t
+repeat
+    do
+    let
+    var x : Integer in
+        x := 123
+    end
+    while true
 end

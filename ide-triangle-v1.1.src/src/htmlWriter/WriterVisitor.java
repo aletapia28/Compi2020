@@ -77,6 +77,10 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 
+
+
+
+
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -579,73 +583,109 @@ public class WriterVisitor implements Visitor {
 
     @Override
     public Object visitRepeatWhileCommand(RepeatWhileCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<RepeatWhileCommand>");
+        ast.E.visit(this,null);
+        ast.C.visit(this,null);
+        writeLineHTML("</RepeatWhileCommand>");
         return null;
     }
 
     @Override
     public Object visitRepeatUntilCommand(RepeatUntilCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<RepeatUntilCommand>");
+        ast.E.visit(this,null);
+        ast.C.visit(this,null);
+        writeLineHTML("</RepeatUntilCommand>");
         return null;
     }
 
     @Override
     public Object visitRepeatDoWhileCommand(RepeatDoWhileCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<RepeatDoWhileCommand>");
+        ast.C.visit(this,null);
+        ast.E.visit(this,null);
+        writeLineHTML("</RepeatDoWhileCommand>");
         return null;
     }
 
     @Override
     public Object visitRepeatDoUntilCommand(RepeatDoUntilCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<RepeatDoUntilCommand>");
+        ast.C.visit(this,null);
+        ast.E.visit(this,null);
+        writeLineHTML("</RepeatDoUntilCommand>");
         return null;
     }
 
     @Override
     public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<RepeatVarCommand>");
+        ast.D.visit(this,null);
+        ast.E1.visit(this,null);
+        ast.C.visit(this,null);
+        writeLineHTML("</RepeatVarCommand>");
         return null;
     }
 
     @Override
     public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<RestOfIfElseCommand>");
+        ast.C.visit(this,null);
+        writeLineHTML("</RestOfIfElseCommand>");
         return null;
     }
 
     @Override
     public Object visitRestOfIfElsifCommand(RestOfIfElsifCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<RestOfIfElsifCommand>");
+        ast.E.visit(this,null);
+        ast.C.visit(this,null);
+        ast.C2.visit(this,null);
+        writeLineHTML("</RestOfIfElsifCommand>");
         return null;
     }
 
     @Override
     public Object visitNextCommand(NextCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<NextCommand>");
+        ast.I.visit(this,null);
+        writeLineHTML("</NextCommand>");
         return null;
     }
 
     @Override
     public Object visitLoopIdentifierCommand(LoopIdentifierCommand ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<LoopIdentifierCommand>");
+        ast.I.visit(this,null);
+        ast.C.visit(this,null);
+        writeLineHTML("</LoopIdentifierCommand>");
         return null;
     }
 
     @Override
     public Object visitInExVarDeclaration(InExVarDeclaration ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<InExVarDeclaration>");
+        ast.I.visit(this,null);
+        ast.E.visit(this,null);
+        writeLineHTML("</InExVarDeclaration>");
         return null;
     }
 
     @Override
     public Object visitCompoundDeclaration(CompoundDeclaration ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<CompoundDeclaration>");
+        ast.D2.visit(this,null);
+        ast.D2.visit(this,null);
+        writeLineHTML("</CompoundDeclaration>");
         return null;
     }
 
     @Override
     public Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object o) {
-        // TODO Auto-generated method stub
+        writeLineHTML("<VarExpresionDeclaration>");
+        ast.I.visit(this,null);
+        ast.E.visit(this,null);
+        writeLineHTML("</VarExpresionDeclaration>");
         return null;
     }
 
