@@ -1,1 +1,3 @@
-let x: 4 
+let 
+ 	var x: Integer
+end

@@ -1,8 +1,7 @@
-repeat
-    do
-    let
-    var x : Integer in
-        x := 123
-    end
-    while true
-end
+! Error: proc llamado con demasiados par?metros
+
+let
+  proc P (x : Integer) ~
+    putint (x * 2)
+in
+  P (10, 20) ! Demasiados par?metros reales (argumentos)

@@ -1,0 +1,15 @@
+let 
+    var a: Integer;     
+    var b: Integer;     
+    var c: Integer
+in   
+    if a<b then  
+        b:= a  
+    elsif a>b then 
+        nil 
+    elsif a<c then 
+        c:=a 
+    else
+        a:= c  
+end 
+end

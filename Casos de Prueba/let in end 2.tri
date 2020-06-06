@@ -1,8 +1,5 @@
-repeat
-    do
-    let
-    var x : Integer in
-        x := 123
-    end
-    while true
+let
+  type t ~ Integer
+in
+  y := t
 end

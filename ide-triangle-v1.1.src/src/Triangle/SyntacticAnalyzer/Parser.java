@@ -284,6 +284,7 @@ public class Parser {
     Command commandAST = null; // in case there's a syntactic error
 
     SourcePosition commandPos = new SourcePosition();
+
     start(commandPos);
 
     switch (currentToken.kind) {
@@ -320,14 +321,16 @@ public class Parser {
        case Token.LET: {
         acceptIt();
         Declaration dAST = parseDeclaration();
+        System.out.println(currentToken.kind);
         accept(Token.IN);
         Command cAST = parseCommand();
+        System.out.println(currentToken.kind);
         accept(Token.END);
         finish(commandPos);
         commandAST = new LetCommand(dAST, cAST, commandPos);
-        // break;
+        break;
       }
-      break;
+      //break;
       // restOfIf
       case Token.IF:{
         acceptIt();
@@ -385,7 +388,6 @@ public class Parser {
                 finish(commandPos);
                 commandAST = new RepeatDoWhileCommand( cAST, eAST, commandPos);
                 break;
-
               }
               //DO  UNTIL END
               case Token.UNTIL: {
@@ -395,11 +397,8 @@ public class Parser {
                 finish(commandPos);
                 commandAST = new RepeatDoUntilCommand( cAST, eAST, commandPos);
                 break;
-            }
-           
-
-            }
-            
+              }
+            }            
           }
           break;
            
@@ -462,29 +461,29 @@ public class Parser {
         
       }
       
-      case Token.NEXT: {
-        acceptIt();
-        switch(currentToken.kind){
-          case Token.IDENTIFIER:{
-          acceptIt();
-          Identifier iAST = parseIdentifier();
-          finish(commandPos);
-          commandAST = new NextCommand(iAST,commandPos); 
-          break;
-          }
+      // case Token.NEXT: {
+      //   acceptIt();
+      //   switch(currentToken.kind){
+      //     case Token.IDENTIFIER:{
+      //     acceptIt();
+      //     Identifier iAST = parseIdentifier();
+      //     finish(commandPos);
+      //     commandAST = new NextCommand(iAST,commandPos); 
+      //     break;
+      //     }
        
 
-          // case Token.NIL:{
-          // acceptIt();
-          // finish(commandPos);
-          // commandAST = new EmptyCommand(commandPos);
-          // break;
-          // }
+      //      case Token.NIL:{
+      //      acceptIt();
+      //      finish(commandPos);
+      //      commandAST = new EmptyCommand(commandPos);
+      //      break;
+      //      }
        
-        }
+      //   }
         
-      }
-      break;
+      // }
+     // break;
       case Token.RETURN: {
         acceptIt();
         finish(commandPos);
@@ -828,7 +827,7 @@ public class Parser {
         Declaration d2AST = parseDeclaration();
         accept(Token.END);
         finish(declarationPos);
-        declarationAST = new CompoundDeclaration(d1AST,d2AST,declarationPos);
+        declarationAST = new SequentialDeclaration(d1AST,d2AST,declarationPos);
         break;
       }
       default:
@@ -874,7 +873,6 @@ public class Parser {
       case Token.VAR: {
         acceptIt();
         Identifier iAST = parseIdentifier();
-
          switch (currentToken.kind) {
            case Token.COLON: {
               acceptIt();
@@ -882,6 +880,7 @@ public class Parser {
               finish(declarationPos);
               declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
            }
+           break;
            case Token.BECOMES: {
               acceptIt();
               Expression eAST = parseExpression();
@@ -985,9 +984,9 @@ public class Parser {
   }
 
   Declaration parseProcFuncs() throws SyntaxError {
-    Declaration declarationAST = null; // in case there's a syntactic error
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
+    Declaration declarationAST = null; // in case there's a syntactic error
 
     do{
      
@@ -996,7 +995,7 @@ public class Parser {
          acceptIt();
          Declaration p2AST = parseProcFunc();        
          finish(declarationPos);
-         declarationAST = new CompoundDeclaration (p1AST, p2AST, declarationPos );
+         declarationAST = new SequentialDeclaration (p1AST, p2AST, declarationPos );
          return declarationAST;
        }
        else{
