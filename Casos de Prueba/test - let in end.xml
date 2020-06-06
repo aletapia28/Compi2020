@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="yes"?>
+<Program>
+<LetCommand>
+<TypeDeclaration>
+<Identifier value="t"/>
+<SimpleTypeDenoter>
+<Identifier value="Integer"/>
+</SimpleTypeDenoter>
+</TypeDeclaration>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="y"/>
+</SimpleVname>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="t"/>
+</SimpleVname>
+</VnameExpression>
+</AssignCommand>
+</LetCommand>
+</Program>

@@ -71,10 +71,10 @@ public class IDECompiler {
         }
 
         if (success){
-            HtmlWriter fileWriter = new HtmlWriter(sourceName);
-        	fileWriter.write(scanner.getHtmlBuffer());
-        	Writer xmlWriter = new Writer(sourceName);
-            xmlWriter.write(rootAST);
+            // HtmlWriter fileWriter = new HtmlWriter(sourceName);
+        	// fileWriter.write(scanner.getHtmlBuffer());
+        	// Writer xmlWriter = new Writer(sourceName);
+            // xmlWriter.write(rootAST);
             System.out.println("Compilation was successful.");
         }
             

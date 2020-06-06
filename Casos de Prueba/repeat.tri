@@ -1,0 +1,18 @@
+! Test de loop do while command, debe compilar
+
+repeat
+
+    do
+
+    
+    let
+
+    var x : Integer in
+
+        x := 123
+
+    end
+
+    while true
+
+end

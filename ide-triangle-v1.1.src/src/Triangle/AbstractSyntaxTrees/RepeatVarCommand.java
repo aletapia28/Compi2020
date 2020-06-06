@@ -18,11 +18,10 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class RepeatVarCommand extends Command{
 
-    public RepeatVarCommand (Identifier iAST, Expression e1AST, Expression e2AST,Command cAST, SourcePosition thePosition) {
+    public RepeatVarCommand (Declaration dAST, Expression e1AST,Command cAST, SourcePosition thePosition) {
         super (thePosition);
-        I= iAST;
+        D= dAST;
         E1 = e1AST;
-        E2 = e2AST;
         C = cAST;
       }
     
@@ -30,8 +29,7 @@ public class RepeatVarCommand extends Command{
         return v.visitRepeatVarCommand(this, o);
       }
     
-      public Identifier I;
+      public Declaration D;
       public Expression E1;
-      public Expression E2;
       public Command C;
 }

@@ -621,7 +621,7 @@ public class Main extends javax.swing.JFrame {
         if (((FileFrame) desktopPane.getSelectedFrame()).getPreviouslySaved()) {
             ((FileFrame) desktopPane.getSelectedFrame()).selectConsole();
             ((FileFrame) desktopPane.getSelectedFrame()).clearConsole();
-            ((FileFrame) desktopPane.getSelectedFrame()).clearTAMC617ode();
+            ((FileFrame) desktopPane.getSelectedFrame()).clearTAMCode();
             ((FileFrame) desktopPane.getSelectedFrame()).clearTree();
             ((FileFrame) desktopPane.getSelectedFrame()).clearTable();
             new File(desktopPane.getSelectedFrame().getTitle().replace(".tri", ".tam")).delete();

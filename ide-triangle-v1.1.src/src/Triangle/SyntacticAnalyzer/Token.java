@@ -67,32 +67,32 @@ final class Token extends Object {
     OPERATOR	= 3,
 
     // reserved words - must be in alphabetical order...
-    AND     = 4,
+    AND     = 4, //nueva palabra reservada
     ARRAY		= 5,
-    //BEGIN	= 5,
+    //BEGIN	= 5, se elimina palabra reservada
     CONST		= 6,
     DO	  	= 7,  
     ELSE	  = 8,  
-    ELSIF   = 9,
+    ELSIF   = 9, //nueva palabra reservada
     END			= 10,
-    EXIT    = 11, 
+    EXIT    = 11, //nueva palabra reservada 
     FUNC		= 12,
     IF		  = 13,  
     IN		  = 14,  
     LET	    = 15,
     NEXT    = 16 ,
-    NIL     = 17 ,
+    NIL     = 17 , //nueva palabra reservada
     OF			= 18 ,
-    PRIVATE = 19,
+    PRIVATE = 19, //nueva palabra reservada
     PROC		= 20,
-    REC     = 21,
+    REC     = 21, //nueva palabra reservada
     RECORD	= 22,
-    REPEAT  = 23,
-    RETURN  = 24,
+    REPEAT  = 23, //nueva palabra reservada
+    RETURN  = 24, //nueva palabra reservada
     THEN	  = 25,  
-    TO      = 26,
+    TO      = 26, //nueva palabra reservada
     TYPE		= 27,
-    UNTIL   = 28,
+    UNTIL   = 28, //nueva palabra reservada
     VAR			= 29,
     WHILE =   30,
 
@@ -121,30 +121,30 @@ final class Token extends Object {
     "<char>",
     "<identifier>",
     "<operator>",
-    "and",
+    "and", //nueva palabra reservada
     "array",
     "const",
     "do",
     "else",
-    "elsif",
+    "elsif", //nueva palabra reservada
     "end",
-    "exit",
+    "exit", //nueva palabra reservada
     "func",
     "if",
     "in",
     "let",
-    "nil",
+    "nil", //nueva palabra reservada
     "of",
-    "private",
+    "private", //nueva palabra reservada
     "proc",
-    "rec",
+    "rec", //nueva palabra reservada
     "record",
-    "repeat",
-    "return",
+    "repeat", //nueva palabra reservada
+    "return", //nueva palabra reservada
     "then",
-    "to",
+    "to", //nueva palabra reservada
     "type",
-    "until",
+    "until", //nueva palabra reservada
     "var",
     "while",
     ".",
@@ -164,6 +164,21 @@ final class Token extends Object {
   };
 
   private final static int	firstReservedWord = Token.ARRAY,
-  				lastReservedWord  = Token.WHILE;
+          lastReservedWord  = Token.WHILE;
+          
+
+
+  //funcion para verificar que es una palabra reservada, retorna boolean
+  public static boolean isReservedWord(String token) {
+	  boolean answer = false;
+	  for(int i = 4;i<30;i++) { //asegurar que concuerde
+		  if(tokenTable[i].equals(token)) {
+			  answer = true;
+			  break;
+		  }
+	  }
+	  return answer;
+  }
 
 }
+
