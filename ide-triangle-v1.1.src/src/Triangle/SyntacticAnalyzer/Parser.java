@@ -882,6 +882,7 @@ public class Parser {
               finish(declarationPos);
               declarationAST = new VarDeclaration(iAST, tAST, declarationPos);
            }
+           break;
            case Token.BECOMES: {
               acceptIt();
               Expression eAST = parseExpression();

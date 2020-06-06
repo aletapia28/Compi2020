@@ -133,6 +133,7 @@ final class Token extends Object {
     "if",
     "in",
     "let",
+    "next",
     "nil", //nueva palabra reservada
     "of",
     "private", //nueva palabra reservada
