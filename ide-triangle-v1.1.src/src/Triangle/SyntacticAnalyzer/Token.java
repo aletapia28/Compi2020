@@ -164,6 +164,21 @@ final class Token extends Object {
   };
 
   private final static int	firstReservedWord = Token.ARRAY,
-  				lastReservedWord  = Token.WHILE;
+          lastReservedWord  = Token.WHILE;
+          
+
+
+  //funcion para verificar que es una palabra reservada, retorna boolean
+  public static boolean isReservedWord(String token) {
+	  boolean answer = false;
+	  for(int i = 4;i<30;i++) { //asegurar que concuerde
+		  if(tokenTable[i].equals(token)) {
+			  answer = true;
+			  break;
+		  }
+	  }
+	  return answer;
+  }
 
 }
+

@@ -44,6 +44,7 @@ import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
 import Triangle.AbstractSyntaxTrees.Identifier;
 import Triangle.AbstractSyntaxTrees.IfCommand;
 import Triangle.AbstractSyntaxTrees.IfExpression;
+import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
 import Triangle.AbstractSyntaxTrees.IntTypeDenoter;
 import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
@@ -88,6 +89,11 @@ import Triangle.AbstractSyntaxTrees.RepeatDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.RepeatVarCommand;
 import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
 import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
+import Triangle.AbstractSyntaxTrees.NextCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElseCommand;
+import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
+import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
+import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
 
 public class LayoutVisitor implements Visitor {
 
@@ -96,7 +102,7 @@ public class LayoutVisitor implements Visitor {
 
   private FontMetrics fontMetrics;
 
-  public LayoutVisitor (FontMetrics fontMetrics) {
+  public LayoutVisitor(FontMetrics fontMetrics) {
     this.fontMetrics = fontMetrics;
   }
 
@@ -107,7 +113,7 @@ public class LayoutVisitor implements Visitor {
 
   public Object visitCallCommand(CallCommand ast, Object obj) {
     return layoutBinary("CallCom.", ast.I, ast.APS);
-   }
+  }
 
   public Object visitEmptyCommand(EmptyCommand ast, Object obj) {
     return layoutNullary("EmptyCom.");
@@ -129,28 +135,44 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("WhileCom.", ast.E, ast.C);
   }
 
-  public Object visitRepeatWhileCommand( RepeatWhileCommand ast, Object obj) {
+  public Object visitRepeatWhileCommand(RepeatWhileCommand ast, Object obj) {
     return layoutBinary("RepeatWhileCom.", ast.E, ast.C);
   }
- 
-  public Object visitRepeatUntilCommand( RepeatUntilCommand ast, Object obj) {
+
+  public Object visitRepeatUntilCommand(RepeatUntilCommand ast, Object obj) {
     return layoutBinary("RepeatUntilCom.", ast.E, ast.C);
   }
-  public Object visitRepeatDoWhileCommand( RepeatDoWhileCommand ast, Object obj) {
+
+  public Object visitRepeatDoWhileCommand(RepeatDoWhileCommand ast, Object obj) {
     return layoutBinary("RepeatDoWhileCom.", ast.C, ast.E);
   }
-  public Object visitRepeatDoUntilCommand( RepeatDoUntilCommand ast, Object obj) {
+
+  public Object visitRepeatDoUntilCommand(RepeatDoUntilCommand ast, Object obj) {
     return layoutBinary("RepeatDoUntilCom.", ast.C, ast.E);
   }
-  public Object visitRepeatVarCommand( RepeatVarCommand ast, Object obj) {
-    return layoutTernary("RepeatVarCom.", ast.D, ast.E1 ,ast.C);
+
+  public Object visitRepeatVarCommand(RepeatVarCommand ast, Object obj) {
+    return layoutTernary("RepeatVarCom.", ast.D, ast.E1, ast.C);
   }
-    public Object visitLoopIdentifierCommand( LoopIdentifierCommand ast, Object obj) {
-    return layoutBinary("LoopIdentifierCommand.", ast.I, ast.E1, ast.E2 ,ast.C);
+
+  public Object visitLoopIdentifierCommand(LoopIdentifierCommand ast, Object obj) {
+    return layoutBinary("LoopIdentifierCommand.", ast.I, ast.C);
   }
-  public Object visitNextCommand( NextCommand ast, Object obj) {
+
+  public Object visitNextCommand(NextCommand ast, Object obj) {
     return layoutUnary("NextCommand.", ast.I);
   }
+
+  public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object o) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Object visitRestOfIfElsifCommand(RestOfIfElsifCommand ast, Object o) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
   // Expressions
   public Object visitArrayExpression(ArrayExpression ast, Object obj) {
     return layoutUnary("ArrayExpr.", ast.AA);
@@ -196,6 +218,10 @@ public class LayoutVisitor implements Visitor {
     return layoutUnary("VnameExpr.", ast.V);
   }
 
+  public Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object o) {
+    return layoutBinary("VaRExpr.", ast.I, ast.E);
+  }
+
 
   // Declarations
   public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
@@ -231,16 +257,14 @@ public class LayoutVisitor implements Visitor {
   }
 
   public Object visitInExVarDeclaration(InExVarDeclaration ast, Object obj) {
-    return layoutBinary("VarIdentiExpresionDecl.", ast.I, ast.T);
+    return layoutBinary("VarIdentiExpresionDecl.", ast.I, ast.E);
   }
 
-    public Object visitCompoundDeclaration(CompoundDeclaration ast, Object obj) {
+  public Object visitCompoundDeclaration(CompoundDeclaration ast, Object obj) {
     return layoutBinary("Compound.Decl.", ast.D1, ast.D2);
   }
 
-  public Object visitInExVarDeclaration(InExVarDeclaration ast, Object obj) {
-    return layoutBinary("VarDecl.", ast.I, ast.E);
-  }
+
 
   // Array Aggregates
   public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
@@ -251,7 +275,6 @@ public class LayoutVisitor implements Visitor {
     return layoutUnary("Sing.ArrayAgg.", ast.E);
   }
 
-
   // Record Aggregates
   public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object obj) {
     return layoutTernary("Mult.Rec.Agg.", ast.I, ast.E, ast.RA);
@@ -260,7 +283,6 @@ public class LayoutVisitor implements Visitor {
   public Object visitSingleRecordAggregate(SingleRecordAggregate ast, Object obj) {
     return layoutBinary("Sing.Rec.Agg.", ast.I, ast.E);
   }
-
 
   // Formal Parameters
   public Object visitConstFormalParameter(ConstFormalParameter ast, Object obj) {
@@ -279,7 +301,6 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("VarF.P.", ast.I, ast.T);
   }
 
-
   public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
     return layoutNullary("EmptyF.P.S.");
   }
@@ -291,7 +312,6 @@ public class LayoutVisitor implements Visitor {
   public Object visitSingleFormalParameterSequence(SingleFormalParameterSequence ast, Object obj) {
     return layoutUnary("Sing.F.P.S.", ast.FP);
   }
-
 
   // Actual Parameters
   public Object visitConstActualParameter(ConstActualParameter ast, Object obj) {
@@ -310,7 +330,6 @@ public class LayoutVisitor implements Visitor {
     return layoutUnary("VarA.P.", ast.V);
   }
 
-
   public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
     return layoutNullary("EmptyA.P.S.");
   }
@@ -322,7 +341,6 @@ public class LayoutVisitor implements Visitor {
   public Object visitSingleActualParameterSequence(SingleActualParameterSequence ast, Object obj) {
     return layoutUnary("Sing.A.P.S.", ast.AP);
   }
-
 
   // Type Denoters
   public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
@@ -357,7 +375,6 @@ public class LayoutVisitor implements Visitor {
     return layoutUnary("Rec.TypeD.", ast.FT);
   }
 
-
   public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
     return layoutTernary("Mult.F.TypeD.", ast.I, ast.T, ast.FT);
   }
@@ -366,7 +383,6 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("Sing.F.TypeD.", ast.I, ast.T);
   }
 
-
   // Literals, Identifiers and Operators
   public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
     return layoutNullary(ast.spelling);
@@ -374,7 +390,7 @@ public class LayoutVisitor implements Visitor {
 
   public Object visitIdentifier(Identifier ast, Object obj) {
     return layoutNullary(ast.spelling);
- }
+  }
 
   public Object visitIntegerLiteral(IntegerLiteral ast, Object obj) {
     return layoutNullary(ast.spelling);
@@ -383,7 +399,6 @@ public class LayoutVisitor implements Visitor {
   public Object visitOperator(Operator ast, Object obj) {
     return layoutNullary(ast.spelling);
   }
-
 
   // Value-or-variable names
   public Object visitDotVname(DotVname ast, Object obj) {
@@ -395,23 +410,21 @@ public class LayoutVisitor implements Visitor {
   }
 
   public Object visitSubscriptVname(SubscriptVname ast, Object obj) {
-    return layoutBinary("Sub.Vname",
-        ast.V, ast.E);
+    return layoutBinary("Sub.Vname", ast.V, ast.E);
   }
-
 
   // Programs
   public Object visitProgram(Program ast, Object obj) {
     return layoutUnary("Program", ast.C);
   }
 
-  private DrawingTree layoutCaption (String name) {
+  private DrawingTree layoutCaption(String name) {
     int w = fontMetrics.stringWidth(name) + 4;
     int h = fontMetrics.getHeight() + 4;
     return new DrawingTree(name, w, h);
   }
 
-  private DrawingTree layoutNullary (String name) {
+  private DrawingTree layoutNullary(String name) {
     DrawingTree dt = layoutCaption(name);
     dt.contour.upper_tail = new Polyline(0, dt.height + 2 * BORDER, null);
     dt.contour.upper_head = dt.contour.upper_tail;
@@ -420,42 +433,40 @@ public class LayoutVisitor implements Visitor {
     return dt;
   }
 
-  private DrawingTree layoutUnary (String name, AST child1) {
+  private DrawingTree layoutUnary(String name, AST child1) {
     DrawingTree dt = layoutCaption(name);
     DrawingTree d1 = (DrawingTree) child1.visit(this, null);
-    dt.setChildren(new DrawingTree[] {d1});
+    dt.setChildren(new DrawingTree[] { d1 });
     attachParent(dt, join(dt));
     return dt;
   }
 
-  private DrawingTree layoutBinary (String name, AST child1, AST child2) {
+  private DrawingTree layoutBinary(String name, AST child1, AST child2) {
     DrawingTree dt = layoutCaption(name);
     DrawingTree d1 = (DrawingTree) child1.visit(this, null);
     DrawingTree d2 = (DrawingTree) child2.visit(this, null);
-    dt.setChildren(new DrawingTree[] {d1, d2});
+    dt.setChildren(new DrawingTree[] { d1, d2 });
     attachParent(dt, join(dt));
     return dt;
   }
 
-  private DrawingTree layoutTernary (String name, AST child1, AST child2,
-                                     AST child3) {
+  private DrawingTree layoutTernary(String name, AST child1, AST child2, AST child3) {
     DrawingTree dt = layoutCaption(name);
     DrawingTree d1 = (DrawingTree) child1.visit(this, null);
     DrawingTree d2 = (DrawingTree) child2.visit(this, null);
     DrawingTree d3 = (DrawingTree) child3.visit(this, null);
-    dt.setChildren(new DrawingTree[] {d1, d2, d3});
+    dt.setChildren(new DrawingTree[] { d1, d2, d3 });
     attachParent(dt, join(dt));
     return dt;
   }
 
-  private DrawingTree layoutQuaternary (String name, AST child1, AST child2,
-                                        AST child3, AST child4) {
+  private DrawingTree layoutQuaternary(String name, AST child1, AST child2, AST child3, AST child4) {
     DrawingTree dt = layoutCaption(name);
     DrawingTree d1 = (DrawingTree) child1.visit(this, null);
     DrawingTree d2 = (DrawingTree) child2.visit(this, null);
     DrawingTree d3 = (DrawingTree) child3.visit(this, null);
     DrawingTree d4 = (DrawingTree) child4.visit(this, null);
-    dt.setChildren(new DrawingTree[] {d1, d2, d3, d4});
+    dt.setChildren(new DrawingTree[] { d1, d2, d3, d4 });
     attachParent(dt, join(dt));
     return dt;
   }
@@ -467,13 +478,11 @@ public class LayoutVisitor implements Visitor {
 
     dt.children[0].offset.y = y + dt.height;
     dt.children[0].offset.x = x1;
-    dt.contour.upper_head = new Polyline(0, dt.height,
-                                new Polyline(x1, y, dt.contour.upper_head));
-    dt.contour.lower_head = new Polyline(0, dt.height,
-                                new Polyline(x2, y, dt.contour.lower_head));
+    dt.contour.upper_head = new Polyline(0, dt.height, new Polyline(x1, y, dt.contour.upper_head));
+    dt.contour.lower_head = new Polyline(0, dt.height, new Polyline(x2, y, dt.contour.lower_head));
   }
 
-  private int join (DrawingTree dt) {
+  private int join(DrawingTree dt) {
     int w, sum;
 
     dt.contour = dt.children[0].contour;
@@ -498,38 +507,38 @@ public class LayoutVisitor implements Visitor {
     lower = c2.upper_head;
 
     while (lower != null && upper != null) {
-        d = offset(x, y, lower.dx, lower.dy, upper.dx, upper.dy);
-	x += d;
-	total += d;
+      d = offset(x, y, lower.dx, lower.dy, upper.dx, upper.dy);
+      x += d;
+      total += d;
 
-	if (y + lower.dy <= upper.dy) {
-	  x += lower.dx;
-	  y += lower.dy;
-	  lower = lower.link;
-	} else {
-	  x -= upper.dx;
-	  y -= upper.dy;
-	  upper = upper.link;
-	}
-      }
-
-      if (lower != null) {
-        b = bridge(c1.upper_tail, 0, 0, lower, x, y);
-        c1.upper_tail = (b.link != null) ? c2.upper_tail : b;
-        c1.lower_tail = c2.lower_tail;
+      if (y + lower.dy <= upper.dy) {
+        x += lower.dx;
+        y += lower.dy;
+        lower = lower.link;
       } else {
-        b = bridge(c2.lower_tail, x, y, upper, 0, 0);
-        if (b.link == null) {
-          c1.lower_tail = b;
-        }
+        x -= upper.dx;
+        y -= upper.dy;
+        upper = upper.link;
       }
-
-      c1.lower_head = c2.lower_head;
-
-      return total;
     }
 
-  private int offset (int p1, int p2, int a1, int a2, int b1, int b2) {
+    if (lower != null) {
+      b = bridge(c1.upper_tail, 0, 0, lower, x, y);
+      c1.upper_tail = (b.link != null) ? c2.upper_tail : b;
+      c1.lower_tail = c2.lower_tail;
+    } else {
+      b = bridge(c2.lower_tail, x, y, upper, 0, 0);
+      if (b.link == null) {
+        c1.lower_tail = b;
+      }
+    }
+
+    c1.lower_head = c2.lower_head;
+
+    return total;
+  }
+
+  private int offset(int p1, int p2, int a1, int a2, int b1, int b2) {
     int d, s, t;
 
     if (b2 <= p2 || p2 + a2 <= 0) {
@@ -564,8 +573,7 @@ public class LayoutVisitor implements Visitor {
     }
   }
 
-  private Polyline bridge (Polyline line1, int x1, int y1,
-                           Polyline line2, int x2, int y2) {
+  private Polyline bridge(Polyline line1, int x1, int y1, Polyline line2, int x2, int y2) {
     int dy, dx, s;
     Polyline r;
 
@@ -582,5 +590,11 @@ public class LayoutVisitor implements Visitor {
 
     return r;
   }
+
+ 
+
+
+
+
 
 }

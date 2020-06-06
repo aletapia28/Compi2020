@@ -18,7 +18,7 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class LoopIdentifierCommand extends Command {
 
-  public LoopIdentifierCommand (Indentifier iAST, Command cAST, SourcePosition thePosition) {
+  public LoopIdentifierCommand (Identifier iAST, Command cAST, SourcePosition thePosition) {
     super (thePosition);
     I = iAST;
     C = cAST;
@@ -28,8 +28,8 @@ public class LoopIdentifierCommand extends Command {
   public Object visit(Visitor v, Object o) {
     return v.visitLoopIdentifierCommand(this, o);
   }
-
-  public Indentifier I;
+  
+  public Identifier I;
   public Command C;
 
 }

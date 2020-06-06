@@ -24,6 +24,11 @@ public final class Scanner {
   private StringBuffer currentSpelling;
   private boolean currentlyScanningToken;
 
+  private String htmlBuffer;
+  private String htmlBufferComment;
+  private String htmlSpaces;
+  private int counter;  
+
   private boolean isLetter(char c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
   }

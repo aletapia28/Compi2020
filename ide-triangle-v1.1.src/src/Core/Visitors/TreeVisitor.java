@@ -160,7 +160,7 @@ public class TreeVisitor implements Visitor {
         return (createUnary("Next Command",ast.I));
     }
     public Object visitLoopIdentifierCommand(LoopIdentifierCommand ast, Object obj) {
-        return (createBinary("Loop Identiifer Command",ast.I));
+        return (createUnary("Loop Identiifer Command",ast.I));
     }
 
     // </editor-fold>
@@ -247,7 +247,7 @@ public class TreeVisitor implements Visitor {
     }
 
     public Object visitInExVarDeclaration(InExVarDeclaration ast, Object obj) {
-        return (createBinary("Identifier and Expresion Declaration", ast.I, ast.T));
+        return (createBinary("Identifier and Expresion Declaration", ast.I, ast.E));
     }
 
     public Object visitCompoundDeclaration(CompoundDeclaration ast, Object obj) {

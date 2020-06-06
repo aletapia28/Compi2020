@@ -18,7 +18,7 @@ import Triangle.SyntacticAnalyzer.SourcePosition;
 
 public class InExVarDeclaration extends Declaration {
 
-  public InExVarDeclaration (Indentifier iAST, Expression eAST, SourcePosition thePosition) {
+  public InExVarDeclaration (Identifier iAST, Expression eAST, SourcePosition thePosition) {
     super (thePosition);
     I = iAST;
     E = eAST;
@@ -29,7 +29,7 @@ public class InExVarDeclaration extends Declaration {
     return v.visitInExVarDeclaration(this, o);
   }
 
-  public Indentifier I;
+  public Identifier I;
   public Expression E;
 
 }

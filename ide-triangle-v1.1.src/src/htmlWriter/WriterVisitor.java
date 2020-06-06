@@ -13,6 +13,7 @@ import Triangle.AbstractSyntaxTrees.CallExpression;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
+import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
 import Triangle.AbstractSyntaxTrees.ConstActualParameter;
 import Triangle.AbstractSyntaxTrees.ConstDeclaration;
 import Triangle.AbstractSyntaxTrees.ConstFormalParameter;
@@ -28,22 +29,19 @@ import Triangle.AbstractSyntaxTrees.FuncFormalParameter;
 import Triangle.AbstractSyntaxTrees.Identifier;
 import Triangle.AbstractSyntaxTrees.IfCommand;
 import Triangle.AbstractSyntaxTrees.IfExpression;
-import Triangle.AbstractSyntaxTrees.InitVarDeclaration;
+import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
 import Triangle.AbstractSyntaxTrees.IntTypeDenoter;
 import Triangle.AbstractSyntaxTrees.IntegerExpression;
 import Triangle.AbstractSyntaxTrees.IntegerLiteral;
 import Triangle.AbstractSyntaxTrees.LetCommand;
 import Triangle.AbstractSyntaxTrees.LetExpression;
-import Triangle.AbstractSyntaxTrees.LoopDoUntilRepeatCommand;
-import Triangle.AbstractSyntaxTrees.LoopDoWhileRepeatCommand;
-import Triangle.AbstractSyntaxTrees.LoopForIsToDoRepeatCommand;
-import Triangle.AbstractSyntaxTrees.LoopUntilDoRepeatCommand;
-import Triangle.AbstractSyntaxTrees.LoopWhileDoRepeatCommand;
+import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
 import Triangle.AbstractSyntaxTrees.MultipleActualParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleArrayAggregate;
 import Triangle.AbstractSyntaxTrees.MultipleFieldTypeDenoter;
 import Triangle.AbstractSyntaxTrees.MultipleFormalParameterSequence;
 import Triangle.AbstractSyntaxTrees.MultipleRecordAggregate;
+import Triangle.AbstractSyntaxTrees.NextCommand;
 import Triangle.AbstractSyntaxTrees.Operator;
 import Triangle.AbstractSyntaxTrees.ProcActualParameter;
 import Triangle.AbstractSyntaxTrees.ProcDeclaration;
@@ -51,6 +49,13 @@ import Triangle.AbstractSyntaxTrees.ProcFormalParameter;
 import Triangle.AbstractSyntaxTrees.Program;
 import Triangle.AbstractSyntaxTrees.RecordExpression;
 import Triangle.AbstractSyntaxTrees.RecordTypeDenoter;
+import Triangle.AbstractSyntaxTrees.RepeatDoUntilCommand;
+import Triangle.AbstractSyntaxTrees.RepeatDoWhileCommand;
+import Triangle.AbstractSyntaxTrees.RepeatUntilCommand;
+import Triangle.AbstractSyntaxTrees.RepeatVarCommand;
+import Triangle.AbstractSyntaxTrees.RepeatWhileCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElseCommand;
+import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
 import Triangle.AbstractSyntaxTrees.SequentialCommand;
 import Triangle.AbstractSyntaxTrees.SequentialDeclaration;
 import Triangle.AbstractSyntaxTrees.SimpleTypeDenoter;
@@ -66,6 +71,7 @@ import Triangle.AbstractSyntaxTrees.UnaryExpression;
 import Triangle.AbstractSyntaxTrees.UnaryOperatorDeclaration;
 import Triangle.AbstractSyntaxTrees.VarActualParameter;
 import Triangle.AbstractSyntaxTrees.VarDeclaration;
+import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
 import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
@@ -136,7 +142,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</WhileCommand>");
         return null;
     }
-
 
     // Expressions
     public Object visitArrayExpression(ArrayExpression ast, Object obj) {
@@ -221,7 +226,6 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-
     // Declarations
     public Object visitBinaryOperatorDeclaration(BinaryOperatorDeclaration ast, Object obj) {
         writeLineHTML("<BinaryOperatorDeclaration>");
@@ -293,7 +297,6 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-
     // Array Aggregates
     public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {
         writeLineHTML("<MultipleArrayAggregate>");
@@ -309,7 +312,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</SingleArrayAggregate>");
         return null;
     }
-
 
     // Record Aggregates
     public Object visitMultipleRecordAggregate(MultipleRecordAggregate ast, Object obj) {
@@ -328,7 +330,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</SingleRecordAggregate>");
         return null;
     }
-
 
     // Formal Parameters
     public Object visitConstFormalParameter(ConstFormalParameter ast, Object obj) {
@@ -364,7 +365,6 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-
     public Object visitEmptyFormalParameterSequence(EmptyFormalParameterSequence ast, Object obj) {
         writeLineHTML("<EmptyFormalParameterSequence/>");
         return null;
@@ -384,7 +384,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</SingleFormalParameterSequence>");
         return null;
     }
-
 
     // Actual Parameters
     public Object visitConstActualParameter(ConstActualParameter ast, Object obj) {
@@ -415,7 +414,6 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-
     public Object visitEmptyActualParameterSequence(EmptyActualParameterSequence ast, Object obj) {
         writeLineHTML("<EmptyActualParameterSequence/>");
         return null;
@@ -435,7 +433,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</SingleActualParameterSequence>");
         return null;
     }
-
 
     // Type Denoters
     public Object visitAnyTypeDenoter(AnyTypeDenoter ast, Object obj) {
@@ -485,7 +482,6 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-
     public Object visitMultipleFieldTypeDenoter(MultipleFieldTypeDenoter ast, Object obj) {
         writeLineHTML("<MultipleFieldTypeDenoter>");
         ast.I.visit(this, null);
@@ -502,7 +498,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</SingleFieldTypeDenoter>");
         return null;
     }
-
 
     // Literals, Identifiers and Operators
     public Object visitCharacterLiteral(CharacterLiteral ast, Object obj) {
@@ -524,7 +519,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("<Operator value=\"" + transformOperator(ast.spelling) + "\"/>");
         return null;
     }
-
 
     // Value-or-variable names
     public Object visitDotVname(DotVname ast, Object obj) {
@@ -549,7 +543,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</SubscriptVname>");
         return null;
     }
-
 
     // Programs
     public Object visitProgram(Program ast, Object obj) {
@@ -581,60 +574,79 @@ public class WriterVisitor implements Visitor {
             return operator;
     }
 
-    //Implementar nuevos visitors
-    @Override  //NEW, MODIFY IF NECESSARY
-	public Object visitLoopDoWhileRepeatCommand(LoopDoWhileRepeatCommand ast, Object o) {
-    	writeLineHTML("<LoopDoWhileRepeatCommand>");
-    	ast.E.visit(this, null);
-        ast.C.visit(this, null);
-    	writeLineHTML("</LoopDoWhileRepeatCommand>");
-		return null;
-	}
+    // Implementar nuevos visitors
 
-    @Override //NEW, MODIFY IF NECESSARY
-	public Object visitLoopDoUntilRepeatCommand(LoopDoUntilRepeatCommand ast, Object o) {
-		writeLineHTML("<LoopDoUntilRepeatCommand>");
-		ast.E.visit(this, null);
-        ast.C.visit(this, null);
-		writeLineHTML("</LoopDoUntilRepeatCommand>");
-		return null;
-	}
 
-    @Override //NEW, MODIFY IF NECESSARY
-	public Object visitLoopForIsToDoRepeatCommand(LoopForIsToDoRepeatCommand ast, Object o) {
-		writeLineHTML("<LoopForIsToDoRepeatCommand>");
-		ast.E.visit(this, null);
-		ast.D.visit(this, null);
-		ast.C.visit(this, null);
-		writeLineHTML("</LoopForIsToDoRepeatCommand>");
-		return null;
-	}
+    @Override
+    public Object visitRepeatWhileCommand(RepeatWhileCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    @Override //NEW, MODIFY IF NECESSARY
-	public Object visitLoopUntilDoRepeatCommand(LoopUntilDoRepeatCommand ast, Object o) {
-		writeLineHTML("<LoopUntilDoRepeatCommand>");
-    	ast.E.visit(this, null);
-        ast.C.visit(this, null);
-    	writeLineHTML("</LoopUntilDoRepeatCommand>");
-		return null;
-	}
+    @Override
+    public Object visitRepeatUntilCommand(RepeatUntilCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    @Override //NEW, MODIFY IF NECESSARY
-	public Object visitLoopWhileDoRepeatCommand(LoopWhileDoRepeatCommand ast, Object o) {
-		writeLineHTML("<LoopWhileDoRepeatCommand>");
-		ast.E.visit(this, null);
-        ast.C.visit(this, null);
-		writeLineHTML("</LoopWhileDoRepeatCommand>");
-		return null;
-	}
+    @Override
+    public Object visitRepeatDoWhileCommand(RepeatDoWhileCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-    @Override //NEW, MODIFY IF NECESSARY
-    public Object visitInitVarDeclaration(InitVarDeclaration ast, Object o) {
-    	writeLineHTML("<InitVarDeclaration>");
-    	ast.I.visit(this, null);
-    	ast.E.visit(this, null);
-    	writeLineHTML("</InitVarDeclaration>");
-    	return null;
+    @Override
+    public Object visitRepeatDoUntilCommand(RepeatDoUntilCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object visitRestOfIfElsifCommand(RestOfIfElsifCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object visitNextCommand(NextCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object visitLoopIdentifierCommand(LoopIdentifierCommand ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object visitInExVarDeclaration(InExVarDeclaration ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object visitCompoundDeclaration(CompoundDeclaration ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object o) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

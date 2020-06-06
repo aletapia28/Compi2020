@@ -32,7 +32,7 @@ public interface Visitor {
   public abstract Object visitRestOfIfElseCommand (RestOfIfElseCommand ast, Object o);
   public abstract Object visitRestOfIfElsifCommand (RestOfIfElsifCommand ast, Object o);
   public abstract Object visitNextCommand (NextCommand ast, Object o);
-  public abstract Object LoopIdentifierCommand (LoopIdentifierCommand ast, Object o);
+  public abstract Object visitLoopIdentifierCommand (LoopIdentifierCommand ast, Object o);
 
   // Expressions
   public abstract Object visitArrayExpression(ArrayExpression ast, Object o);
@@ -60,7 +60,7 @@ public interface Visitor {
   public abstract Object visitInExVarDeclaration(InExVarDeclaration ast, Object o);
   public abstract Object visitCompoundDeclaration(CompoundDeclaration ast, Object o);
   public abstract Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object o);
-
+  
   // Array Aggregates
   public abstract Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object o);
   public abstract Object visitSingleArrayAggregate(SingleArrayAggregate ast, Object o);
