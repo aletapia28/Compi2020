@@ -325,7 +325,8 @@ public class Parser {
         accept(Token.END);
         finish(commandPos);
         commandAST = new LetCommand(dAST, cAST, commandPos);
-        // break;
+        
+        
       }
       break;
       // restOfIf
