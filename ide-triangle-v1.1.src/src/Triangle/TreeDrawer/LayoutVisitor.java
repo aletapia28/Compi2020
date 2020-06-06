@@ -87,6 +87,7 @@ import Triangle.AbstractSyntaxTrees.RepeatDoUntilCommand;
 import Triangle.AbstractSyntaxTrees.RepeatDoWhileCommand;
 import Triangle.AbstractSyntaxTrees.RepeatVarCommand;
 import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
+import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
 
 public class LayoutVisitor implements Visitor {
 
@@ -142,9 +143,14 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("RepeatDoUntilCom.", ast.C, ast.E);
   }
   public Object visitRepeatVarCommand( RepeatVarCommand ast, Object obj) {
-    return layoutQuaternary("RepeatVarCom.", ast.I, ast.E1, ast.E2 ,ast.C);
+    return layoutTernary("RepeatVarCom.", ast.D, ast.E1 ,ast.C);
   }
-
+    public Object visitLoopIdentifierCommand( LoopIdentifierCommand ast, Object obj) {
+    return layoutBinary("LoopIdentifierCommand.", ast.I, ast.E1, ast.E2 ,ast.C);
+  }
+  public Object visitNextCommand( NextCommand ast, Object obj) {
+    return layoutUnary("NextCommand.", ast.I);
+  }
   // Expressions
   public Object visitArrayExpression(ArrayExpression ast, Object obj) {
     return layoutUnary("ArrayExpr.", ast.AA);
@@ -224,6 +230,17 @@ public class LayoutVisitor implements Visitor {
     return layoutBinary("VarDecl.", ast.I, ast.T);
   }
 
+  public Object visitInExVarDeclaration(InExVarDeclaration ast, Object obj) {
+    return layoutBinary("VarIdentiExpresionDecl.", ast.I, ast.T);
+  }
+
+    public Object visitCompoundDeclaration(CompoundDeclaration ast, Object obj) {
+    return layoutBinary("Compound.Decl.", ast.D1, ast.D2);
+  }
+
+  public Object visitInExVarDeclaration(InExVarDeclaration ast, Object obj) {
+    return layoutBinary("VarDecl.", ast.I, ast.E);
+  }
 
   // Array Aggregates
   public Object visitMultipleArrayAggregate(MultipleArrayAggregate ast, Object obj) {

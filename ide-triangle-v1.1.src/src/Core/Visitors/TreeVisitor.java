@@ -79,6 +79,11 @@ import Triangle.AbstractSyntaxTrees.RepeatVarCommand;
 import Triangle.AbstractSyntaxTrees.RestOfIfElseCommand;
 import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
 import Triangle.AbstractSyntaxTrees.NextCommand;
+import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
+import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
+import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
+import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
+// import Triangle.AbstractSyntaxTrees.
 //import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
 
 /**
@@ -142,7 +147,7 @@ public class TreeVisitor implements Visitor {
         return (createBinary("Repeat Do Until Command", ast.E, ast.C));
     }
     public Object visitRepeatVarCommand(RepeatVarCommand ast, Object obj) {
-        return (createQuaternary("Repeat Var", ast.I, ast.E1, ast.E2 ,ast.C));
+        return (createTernary("Repeat Var", ast.D, ast.E1,ast.C));
     }
 
     public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object obj) {
@@ -154,7 +159,9 @@ public class TreeVisitor implements Visitor {
      public Object visitNextCommand(NextCommand ast, Object obj) {
         return (createUnary("Next Command",ast.I));
     }
-
+    public Object visitLoopIdentifierCommand(LoopIdentifierCommand ast, Object obj) {
+        return (createBinary("Loop Identiifer Command",ast.I));
+    }
 
     // </editor-fold>
 
@@ -237,6 +244,17 @@ public class TreeVisitor implements Visitor {
 
     public Object visitVarDeclaration(VarDeclaration ast, Object obj) {
         return (createBinary("Variable Declaration", ast.I, ast.T));
+    }
+
+    public Object visitInExVarDeclaration(InExVarDeclaration ast, Object obj) {
+        return (createBinary("Identifier and Expresion Declaration", ast.I, ast.T));
+    }
+
+    public Object visitCompoundDeclaration(CompoundDeclaration ast, Object obj) {
+        return (createBinary("Compound Declaration", ast.D1, ast.D2));
+    }
+    public Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object obj) {
+        return (createBinary("Var Expression Declaration", ast.I, ast.E));
     }
     // </editor-fold>
 

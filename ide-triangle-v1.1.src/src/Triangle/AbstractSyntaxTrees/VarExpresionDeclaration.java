@@ -1,5 +1,5 @@
-/*
- * @(#)LetExpression.java                        2.1 2003/10/07
+VarExpresionDeclarationVarExpresionDeclaration/*
+ * @(#)VarDeclaration.java                        2.1 2003/10/07
  *
  * Copyright (C) 1999, 2003 D.A. Watt and D.F. Brown
  * Dept. of Computing Science, University of Glasgow, Glasgow G12 8QQ Scotland
@@ -16,20 +16,23 @@ package Triangle.AbstractSyntaxTrees;
 
 import Triangle.SyntacticAnalyzer.SourcePosition;
 
-public class RepeatVarCommand extends Command{
+public class VarExpresionDeclaration extends Declaration {
 
-    public RepeatVarCommand (Declaration dAST, Expression e1AST,Command cAST, SourcePosition thePosition) {
-        super (thePosition);
-        D= dAST;
-        E1 = e1AST;
-        C = cAST;
-      }
-    
-      public Object visit(Visitor v, Object o) {
-        return v.visitRepeatVarCommand(this, o);
-      }
-    
-      public Declaration D;
-      public Expression E1;
-      public Command C;
+  public VarExpresionDeclaration (Identifier iAST, Expression eAST,
+                         SourcePosition thePosition) {
+    super (thePosition);
+    I = iAST;
+    E = eAST;
+  }
+
+  public Object visit(Visitor v, Object o) {
+    return v.visitVarExpresionDeclaration(this, o);
+  }
+
+  public Identifier I;
+  public Expression E;
 }
+
+
+
+

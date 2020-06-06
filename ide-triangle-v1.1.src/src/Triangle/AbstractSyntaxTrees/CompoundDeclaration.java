@@ -1,5 +1,5 @@
 /*
- * @(#)LetExpression.java                        2.1 2003/10/07
+ * @(#)SequentialDeclaration.java                2.1 2003/10/07
  *
  * Copyright (C) 1999, 2003 D.A. Watt and D.F. Brown
  * Dept. of Computing Science, University of Glasgow, Glasgow G12 8QQ Scotland
@@ -16,20 +16,18 @@ package Triangle.AbstractSyntaxTrees;
 
 import Triangle.SyntacticAnalyzer.SourcePosition;
 
-public class RepeatVarCommand extends Command{
+public class CompoundDeclaration extends Declaration {
 
-    public RepeatVarCommand (Declaration dAST, Expression e1AST,Command cAST, SourcePosition thePosition) {
-        super (thePosition);
-        D= dAST;
-        E1 = e1AST;
-        C = cAST;
-      }
-    
-      public Object visit(Visitor v, Object o) {
-        return v.visitRepeatVarCommand(this, o);
-      }
-    
-      public Declaration D;
-      public Expression E1;
-      public Command C;
+  public CompoundDeclaration (Declaration d1AST, Declaration d2AST,
+                       SourcePosition thePosition) {
+    super (thePosition);
+    D1 = d1AST;
+    D2 = d2AST;
+  }
+
+  public Object visit(Visitor v, Object o) {
+    return v.visitCompoundDeclaration(this, o);
+  }
+
+  public Declaration D1, D2;
 }

@@ -86,6 +86,10 @@ import Triangle.AbstractSyntaxTrees.RepeatVarCommand;
 import Triangle.AbstractSyntaxTrees.RestOfIfElseCommand;
 import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
 import Triangle.AbstractSyntaxTrees.NextCommand;
+import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
+import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
+import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
+
 //import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
 
 
@@ -179,9 +183,8 @@ public Object visitRepeatDoUntilCommand(RepeatDoUntilCommand ast, Object o) {
     return(null);
 }
 public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) { 
-    ast.I.visit(this,null);
+    ast.D.visit(this,null);
     ast.E1.visit(this,null);
-    ast.E2.visit(this,null); 
     ast.C.visit(this,null);
     
     return(null);
@@ -204,6 +207,12 @@ public Object visitNextCommand(NextCommand ast, Object o) {
     return(null);
 }
 
+public Object visitLoopIdentifierCommand(LoopIdentifierCommand ast, Object o) { 
+    ast.I.visit(this, null);
+    ast.C.visit(this, null);
+    
+    return(null);
+}
 
 
   // </editor-fold>
@@ -372,6 +381,40 @@ public Object visitNextCommand(NextCommand ast, Object o) {
       } catch (NullPointerException e) { }
       
       ast.T.visit(this, null);
+      return(null);
+  }
+  public Object visitCompoundDeclaration(CompoundDeclaration ast, Object o) {   
+      ast.D1.visit(this, null);
+      ast.D2.visit(this, null);
+      
+      return(null);
+  }
+
+    public Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object o) {      
+      try {
+      addIdentifier(ast.I.spelling, 
+              "KnownAddress", 
+              (ast.entity!=null?ast.entity.size:0), 
+              ((KnownAddress)ast.entity).address.level, 
+              ((KnownAddress)ast.entity).address.displacement, 
+              -1);
+      } catch (NullPointerException e) { }
+      
+      ast.E.visit(this, null);
+      return(null);
+  }
+
+    public Object visitInExVarDeclaration(InExVarDeclaration ast, Object o) {      
+      try {
+      addIdentifier(ast.I.spelling, 
+              "KnownAddress", 
+              (ast.entity!=null?ast.entity.size:0), 
+              ((KnownAddress)ast.entity).address.level, 
+              ((KnownAddress)ast.entity).address.displacement, 
+              -1);
+      } catch (NullPointerException e) { }
+      
+      ast.E.visit(this, null);
       return(null);
   }
   

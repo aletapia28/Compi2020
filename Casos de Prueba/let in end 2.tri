@@ -1,0 +1,7 @@
+!Test let type declaration
+
+let
+  type t ~ Integer
+in
+  y := t
+end
