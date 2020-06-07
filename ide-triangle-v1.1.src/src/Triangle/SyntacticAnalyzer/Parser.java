@@ -321,10 +321,8 @@ public class Parser {
        case Token.LET: {
         acceptIt();
         Declaration dAST = parseDeclaration();
-        System.out.println(currentToken.kind);
         accept(Token.IN);
         Command cAST = parseCommand();
-        System.out.println(currentToken.kind);
         accept(Token.END);
         finish(commandPos);
         commandAST = new LetCommand(dAST, cAST, commandPos);

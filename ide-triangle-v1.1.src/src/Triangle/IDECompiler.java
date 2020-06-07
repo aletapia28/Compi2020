@@ -72,10 +72,8 @@ public class IDECompiler {
 
         if (success){
             HtmlWriter fileWriter = new HtmlWriter(sourceName);
-           fileWriter.write(scanner.getHtmlBuffer());
-            System.out.println("html");
+            fileWriter.write(scanner.getHtmlBuffer());
             Writer xmlWriter = new Writer(sourceName);
-           System.out.println("xml");
             xmlWriter.write(rootAST);
             System.out.println("Compilation was successful.");
         }

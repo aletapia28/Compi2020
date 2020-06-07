@@ -1,10 +1,12 @@
+!Esto es un comentario
+!hola
 let 
     var a: Integer;     
     var b: Integer;     
     var c: Integer
-in   
+in
     if a<b then  
-        b:= a  
+        b:= 234  
     elsif a>b then 
         nil 
     elsif a<c then 

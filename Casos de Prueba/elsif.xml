@@ -41,11 +41,9 @@
 <SimpleVname>
 <Identifier value="b"/>
 </SimpleVname>
-<VnameExpression>
-<SimpleVname>
-<Identifier value="a"/>
-</SimpleVname>
-</VnameExpression>
+<IntegerExpression>
+<IntegerLiteral value="234"/>
+</IntegerExpression>
 </AssignCommand>
 <IfCommand>
 <BinaryExpression>

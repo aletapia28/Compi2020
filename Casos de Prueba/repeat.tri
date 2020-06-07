@@ -4,4 +4,5 @@ let
   proc P (x : Integer) ~
     putint (x * 2)
 in
-  P (10, 20) ! Demasiados par?metros reales (argumentos)
+  P (10) ! Demasiados par?metros reales (argumentos)
+end
