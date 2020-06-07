@@ -117,51 +117,51 @@ final class Token extends Object {
     ERROR		= 44;
 
   private static String[] tokenTable = new String[] {
-    "<int>", //0
-    "<char>", //1
-    "<identifier>", //2
-    "<operator>", //3
-    "and", //nueva palabra reservada //4 
-    "array",// 5 
-    "const",// 6 
-    "do", //7 
-    "else", //8 
-    "elsif", //nueva palabra reservada //9 
-    "end", //0
-    "exit", //nueva palabra reservada 11
-    "func", //12
-    "if", //13
-    "in", //14
-    "let", //15 
-    "next", //16
-    "nil", //nueva palabra reservada //17
-    "of", //18
-    "private", //nueva palabra reservada //19
-    "proc", //20
-    "rec", //nueva palabra reservada 21 
-    "record", //22
-    "repeat", //nueva palabra reservada //23
-    "return", //nueva palabra reservada //24 
-    "then", //25 
-    "to", //nueva palabra reservada //26 
-    "type", //27
-    "until", //nueva palabra reservada //28
-    "var", //29
-    "while", //30
-    ".", //31
-    ":", //32
-    ";", //33
-    ",", //34
-    ":=", //35 
-    "~", //36
-    "(", //37
-    ")", //38
-    "[", //39
-    "]", //40
-    "{", //41
-    "}", //42
-    "", //43
-    "<error>" //44
+    "<int>",
+    "<char>",
+    "<identifier>",
+    "<operator>",
+    "and", //nueva palabra reservada
+    "array",
+    "const",
+    "do",
+    "else",
+    "elsif", //nueva palabra reservada
+    "end",
+    "exit", //nueva palabra reservada
+    "func",
+    "if",
+    "in",
+    "let",
+    "next",
+    "nil", //nueva palabra reservada
+    "of",
+    "private", //nueva palabra reservada
+    "proc",
+    "rec", //nueva palabra reservada
+    "record",
+    "repeat", //nueva palabra reservada
+    "return", //nueva palabra reservada
+    "then",
+    "to", //nueva palabra reservada
+    "type",
+    "until", //nueva palabra reservada
+    "var",
+    "while",
+    ".",
+    ":",
+    ";",
+    ",",
+    ":=",
+    "~",
+    "(",
+    ")",
+    "[",
+    "]",
+    "{",
+    "}",
+    "",
+    "<error>"
   };
 
   private final static int	firstReservedWord = Token.ARRAY,

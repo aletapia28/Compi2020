@@ -196,7 +196,6 @@ public class TableVisitor implements Visitor {
 
     public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object o) {
         ast.C.visit(this, null);
-
         return (null);
     }
 
@@ -403,12 +402,12 @@ public class TableVisitor implements Visitor {
     }
 
     public Object visitInExVarDeclaration(InExVarDeclaration ast, Object o) {
-        try {
-            addIdentifier(ast.I.spelling, "KnownAddress", (ast.entity != null ? ast.entity.size : 0),
-                    ((KnownAddress) ast.entity).address.level, ((KnownAddress) ast.entity).address.displacement, -1);
-        } catch (NullPointerException e) {
-        }
-
+        // try {
+        //     addIdentifier(ast.I.spelling, "KnownAddress", (ast.entity != null ? ast.entity.size : 0),
+        //             ((KnownAddress) ast.entity).address.level, ((KnownAddress) ast.entity).address.displacement, -1);
+        // } catch (NullPointerException e) {
+        // }
+        ast.I.visit(this,null);
         ast.E.visit(this, null);
         return (null);
     }

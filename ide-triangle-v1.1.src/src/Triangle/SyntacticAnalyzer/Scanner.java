@@ -23,11 +23,11 @@ public final class Scanner {
   private char currentChar;
   private StringBuffer currentSpelling;
   private boolean currentlyScanningToken;
-
+  
   private String htmlBuffer;
   private String htmlBufferComment;
   private String htmlSpaces;
-  private int counter;  
+  private int counter;
 
   private boolean isLetter(char c) {
     return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
@@ -53,6 +53,10 @@ public final class Scanner {
     sourceFile = source;
     currentChar = sourceFile.getSource();
     debug = false;
+    htmlBuffer = "";
+    htmlSpaces = "";
+    htmlBufferComment = "";
+    counter = 0;
   }
 
   public void enableDebugging() {
@@ -73,19 +77,23 @@ public final class Scanner {
   private void scanSeparator() {
     switch (currentChar) {
     case '!':
-      {
+    	addToHtmlComment(String.valueOf(currentChar));
         takeIt();
-        addToHtmlComment(String.valueOf(currentChar));
-        while ((currentChar != SourceFile.EOL) && (currentChar != SourceFile.EOT))
-          takeIt();
-          addToHtmlComment(String.valueOf(currentChar));
-        if (currentChar == SourceFile.EOL)
-          takeIt();
-          addHtmlJumpLine();
-      }
+        while ((currentChar != SourceFile.EOL) && (currentChar != SourceFile.EOT)) {
+        	addToHtmlComment(String.valueOf(currentChar));
+        	takeIt();
+        }
+        addHtmlComment();
+        if (currentChar == SourceFile.EOL) {
+        	addHtmlJumpLine();
+        	takeIt();
+        }
       break;
-
-    case ' ': 
+    case SourceFile.EOT:
+    	takeIt();
+        addHtmlSpace();
+        break;
+    case ' ':
       takeIt();
       htmlSpaces+="&nbsp;";
       break;
@@ -93,7 +101,7 @@ public final class Scanner {
       takeIt();
       addHtmlJumpLine();
       break;
-    case '\r':
+    case '\r': 
       takeIt();
       addHtmlSpace();
       break;
@@ -123,7 +131,7 @@ public final class Scanner {
       takeIt();
       while (isLetter(currentChar) || isDigit(currentChar))
         takeIt();
-      addHtmlIdentifier();
+      addHtmlIdentifier(); //-------HTML
       return Token.IDENTIFIER;
 
     case '0':  case '1':  case '2':  case '3':  case '4':
@@ -131,7 +139,7 @@ public final class Scanner {
       takeIt();
       while (isDigit(currentChar))
         takeIt();
-      addHtmlLiteral();
+      addHtmlLiteral(); //-------HTML
       return Token.INTLITERAL;
 
     case '+':  case '-':  case '*': case '/':  case '=':
@@ -140,30 +148,34 @@ public final class Scanner {
       takeIt();
       while (isOperator(currentChar))
         takeIt();
-      addHtmlIdentifier();
+      addHtmlIdentifier(); //-------HTML
       return Token.OPERATOR;
 
     case '\'':
       takeIt();
       takeIt(); // the quoted character
       if (currentChar == '\'') {
-        takeIt();
-        addHtmlLiteral();
+      	takeIt();
+      	addHtmlLiteral(); //-----HTML
         return Token.CHARLITERAL;
       } else
         return Token.ERROR;
 
     case '.':
       takeIt();
+      addHtmlIdentifier();
       return Token.DOT;
 
     case ':':
       takeIt();
       if (currentChar == '=') {
         takeIt();
+        addHtmlIdentifier();
         return Token.BECOMES;
-      } else
+      } else {
+    	addHtmlIdentifier();
         return Token.COLON;
+      }
 
     case ';':
       takeIt();
@@ -222,14 +234,12 @@ public final class Scanner {
   public String getHtmlBuffer() {
 	  return htmlBuffer;
   }
-
   private void addHtmlReservedWord() {
 	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000><strong>"+htmlSpaces+currentSpelling.toString()+"</strong></FONT>";
 	  htmlSpaces = "";
 	  counter++;
 	  
   }
-
   private void addHtmlIdentifier() {
 	  String token = currentSpelling.toString();
 	  if(Token.isReservedWord(token)) {
@@ -241,16 +251,16 @@ public final class Scanner {
 	  }
   }
   
+  //agrega texto con formato para las literales
   private void addHtmlLiteral() {
 	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000099>"+htmlSpaces+currentSpelling.toString()+"</FONT>";
 	  htmlSpaces = "";
 	  counter++;
   }
-  
   private void addToHtmlComment(String newChar) {
 	  htmlBufferComment+=newChar;
   }
-  
+  //agrega texto con formato para las comentarios
   private void addHtmlComment() {
 	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#008000>"+htmlSpaces+htmlBufferComment+"</FONT>";
 	  htmlBufferComment = "";
@@ -258,47 +268,51 @@ public final class Scanner {
 	  counter++;
   }
   
+  //agrega los espacios que se van acumulando cuando se lee
   private void addHtmlSpace() {
 	  htmlBuffer+="<FONT FACE= \"monospace\" SIZE =3 COLOR=#000000>"+htmlSpaces+currentSpelling.toString()+"</FONT>";
 	  htmlSpaces = "";
 	  counter++;
   }
   
+  //agrega el salto de linea al html
   private void addHtmlJumpLine() {
 	  htmlBuffer+="<br/>";
 	  htmlSpaces = "";
 	  counter++;
   }
-
-  private void addHtmlTab() {
-	  htmlBuffer+="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-  }
-
+  
   public Token scan () {
     Token tok;
     SourcePosition pos;
     int kind;
-
-    currentlyScanningToken = false;
+    currentSpelling = new StringBuffer("");
     while (currentChar == '!'
            || currentChar == ' '
            || currentChar == '\n'
            || currentChar == '\r'
-           || currentChar == '\t')
+           || currentChar == '\t') {
       scanSeparator();
-
+    }
     currentlyScanningToken = true;
     currentSpelling = new StringBuffer("");
     pos = new SourcePosition();
     pos.start = sourceFile.getCurrentLine();
-
     kind = scanToken();
+    
+    
 
+    
+    
     pos.finish = sourceFile.getCurrentLine();
     tok = new Token(kind, currentSpelling.toString(), pos);
     if (debug)
       System.out.println(tok);
     return tok;
+  }
+  
+  private void addHtmlTab() {
+	  htmlBuffer+="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
   }
 
 }

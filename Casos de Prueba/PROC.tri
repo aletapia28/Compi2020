@@ -1,0 +1,6 @@
+let
+  proc P (x : Integer) ~
+    putint (x * 2)
+in
+  P (10)
+end

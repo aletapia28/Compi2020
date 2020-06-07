@@ -1,0 +1,9 @@
+!Test de loop until command, deberia compilar
+
+repeat
+until true
+do
+     let var x : Integer in
+	x := 123
+     end
+end

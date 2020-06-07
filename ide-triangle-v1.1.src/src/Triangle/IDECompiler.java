@@ -48,15 +48,12 @@ public class IDECompiler {
         
         System.out.println("Syntactic Analysis ...");
         SourceFile source = new SourceFile(sourceName);
-        System.out.println("source");
         Scanner scanner = new Scanner(source);
         report = new IDEReporter();
         Parser parser = new Parser(scanner, report);
-        System.out.println(parser);
         boolean success = false;
         
         rootAST = parser.parseProgram();
-        System.out.println("roootAST");
         if (report.numErrors == 0) {
             // System.out.println("Contextual Analysis ...");
             // Checker checker = new Checker(report);
@@ -74,12 +71,9 @@ public class IDECompiler {
         }
 
         if (success){
-            System.out.println("if");
             HtmlWriter fileWriter = new HtmlWriter(sourceName);
-           fileWriter.write(scanner.getHtmlBuffer());
-            System.out.println("html");
+            fileWriter.write(scanner.getHtmlBuffer());
             Writer xmlWriter = new Writer(sourceName);
-           System.out.println("xml");
             xmlWriter.write(rootAST);
             System.out.println("Compilation was successful.");
         }
