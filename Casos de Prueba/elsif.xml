@@ -8,20 +8,12 @@
 <Identifier value="Integer"/>
 </SimpleTypeDenoter>
 </VarDeclaration>
-<SequentialDeclaration>
 <VarDeclaration>
 <Identifier value="b"/>
 <SimpleTypeDenoter>
 <Identifier value="Integer"/>
 </SimpleTypeDenoter>
 </VarDeclaration>
-<VarDeclaration>
-<Identifier value="c"/>
-<SimpleTypeDenoter>
-<Identifier value="Integer"/>
-</SimpleTypeDenoter>
-</VarDeclaration>
-</SequentialDeclaration>
 </SequentialDeclaration>
 <IfCommand>
 <BinaryExpression>
@@ -60,41 +52,14 @@
 </VnameExpression>
 </BinaryExpression>
 <EmptyCommand/>
-<IfCommand>
-<BinaryExpression>
-<VnameExpression>
-<SimpleVname>
-<Identifier value="a"/>
-</SimpleVname>
-</VnameExpression>
-<Operator value="&lt;"/>
-<VnameExpression>
-<SimpleVname>
-<Identifier value="c"/>
-</SimpleVname>
-</VnameExpression>
-</BinaryExpression>
-<AssignCommand>
-<SimpleVname>
-<Identifier value="c"/>
-</SimpleVname>
-<VnameExpression>
-<SimpleVname>
-<Identifier value="a"/>
-</SimpleVname>
-</VnameExpression>
-</AssignCommand>
 <AssignCommand>
 <SimpleVname>
 <Identifier value="a"/>
 </SimpleVname>
-<VnameExpression>
-<SimpleVname>
-<Identifier value="c"/>
-</SimpleVname>
-</VnameExpression>
+<IntegerExpression>
+<IntegerLiteral value="100"/>
+</IntegerExpression>
 </AssignCommand>
-</IfCommand>
 </IfCommand>
 </IfCommand>
 </LetCommand>
