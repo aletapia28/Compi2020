@@ -280,6 +280,7 @@ public class Parser {
     return commandAST;
   }
 
+  //Se agregan nuevos comandos
   Command parseSingleCommand() throws SyntaxError {
     Command commandAST = null; // in case there's a syntactic error
 
@@ -309,6 +310,7 @@ public class Parser {
       }
         break;
 
+      //Agregando el caso de NIl
       case Token.NIL: {
         acceptIt();
         finish(commandPos);
@@ -317,7 +319,7 @@ public class Parser {
         
       }
 
-      // LET IN END
+      // Agregando caso de LET IN END
        case Token.LET: {
         acceptIt();
         Declaration dAST = parseDeclaration();
@@ -328,8 +330,8 @@ public class Parser {
         commandAST = new LetCommand(dAST, cAST, commandPos);
         break;
       }
-      //break;
-      // restOfIf
+      
+      // Modificando caso IF 
       case Token.IF:{
         acceptIt();
         Expression eAST = parseExpression();
@@ -343,13 +345,13 @@ public class Parser {
 
       }
 
-      // REPEAT WHILE DO END
+      // Agregando caso Repeat
       case Token.REPEAT: {
         acceptIt();
 
         switch (currentToken.kind) {
           
-          // While do end
+          //WHILE DO END
           case Token.WHILE: {
             acceptIt();
             Expression eAST = parseExpression();
@@ -372,13 +374,14 @@ public class Parser {
             commandAST = new RepeatUntilCommand(eAST, cAST, commandPos);
           }
           break;
-          //DO WHILE END
 
+          //Agredando caso Repeat DO
           case Token.DO: {
             acceptIt();
             Command cAST = parseCommand();
             switch (currentToken.kind) {
               
+              //DO WHILE END
               case Token.WHILE: {
                 acceptIt();
                 Expression eAST = parseExpression();
@@ -400,9 +403,8 @@ public class Parser {
           }
           break;
            
-          // VAR IN TO DO END
+          // Agredando caso VAR
           case Token.VAR: {
-            // COMO HACERLO TERNARIO
             acceptIt();
             Identifier iAST = parseIdentifier();
             accept(Token.IN);
@@ -418,7 +420,10 @@ public class Parser {
             break;
           }
           
-           // REPEAT LOOP
+         
+        
+         
+        // REPEAT LOOP
         //   case Token.LOOP: {
         //     acceptIt();
             
@@ -489,48 +494,7 @@ public class Parser {
         break;
       }
       
-      // case Token.BEGIN:
-      // acceptIt();
-      // commandAST = parseCommand();
-      // accept(Token.END);
-      // break;
-
-      // case Token.LET:
-      // {
-      // acceptIt();
-      // Declaration dAST = parseDeclaration();
-      // accept(Token.IN);
-      // Command cAST = parseSingleCommand();
-      // finish(commandPos);
-      // commandAST = new LetCommand(dAST, cAST, commandPos);
-      // }
-      // break;
-
-      // case Token.IF:
-      // {
-      // acceptIt();
-      // Expression eAST = parseExpression();
-      // accept(Token.THEN);
-      // Command c1AST = parseSingleCommand();
-      // accept(Token.ELSE);
-      // Command c2AST = parseSingleCommand();
-      // finish(commandPos);
-      // commandAST = new IfCommand(eAST, c1AST, c2AST, commandPos);
-      // }
-      // break;
-
-      // case Token.WHILE:
-      // {
-      // acceptIt();
-      // Expression eAST = parseExpression();
-      // accept(Token.DO);
-      // Command cAST = parseSingleCommand();
-      // finish(commandPos);
-      // commandAST = new WhileCommand(eAST, cAST, commandPos);
-      // }
-      // break;
-
-      case Token.SEMICOLON:
+          case Token.SEMICOLON:
       case Token.END:
       case Token.ELSE:
       case Token.IN:
@@ -549,20 +513,18 @@ public class Parser {
     return commandAST;
   }
 
+
+  // Parse Rest of IF
   Command parseRestOfIf() throws SyntaxError {
     Command commandAST = null; // in case there's a syntactic error
     SourcePosition commandPos = new SourcePosition();
     start(commandPos);
-    // commandAST = parseSingleCommand();
     switch (currentToken.kind) {
 
-      // revisar la construccion del restofif,
       case Token.ELSE: {
         acceptIt();
         Command cAST = parseCommand();
         accept(Token.END);
-        // finish(commandPos);
-        // commandAST = new RestOfIfElseCommand(cAST,commandPos);
         commandAST = cAST;
       }
         break;
@@ -576,6 +538,10 @@ public class Parser {
         finish(commandPos);
         commandAST = new IfCommand(eAST, cAST, c2AST, commandPos); 
       }
+        break;
+
+      default:
+        syntacticError("\"%\" cannot start a command", currentToken.spelling);
         break;
 
     }
@@ -804,6 +770,7 @@ public class Parser {
   //
   ///////////////////////////////////////////////////////////////////////////////
 
+  //Agregando declaracion compuesta
   Declaration parseCompoundDeclaration() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
     SourcePosition declarationPos = new SourcePosition();
@@ -936,7 +903,7 @@ public class Parser {
     return declarationAST;
   }
 
-  // FUNC Y PROC DE SINGLE DECLATION YA NO SE USAN??
+ 
   Declaration parseProcFunc() throws SyntaxError {
     Declaration declarationAST = null; // in case there's a syntactic error
 
