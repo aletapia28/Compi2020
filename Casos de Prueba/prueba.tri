@@ -1,0 +1,19 @@
+let
+
+  rec proc x () ~ 
+
+    let
+
+    var x: Integer in
+
+    x := 123
+
+    end
+end
+  end
+
+in
+
+  y := x
+
+end

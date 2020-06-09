@@ -1,0 +1,60 @@
+<?xml version="1.0" standalone="yes"?>
+<Program>
+<LetCommand>
+<SequentialDeclaration>
+<ProcDeclaration>
+<Identifier value="x"/>
+<EmptyFormalParameterSequence/>
+<LetCommand>
+<VarDeclaration>
+<Identifier value="y"/>
+<SimpleTypeDenoter>
+<Identifier value="Integer"/>
+</SimpleTypeDenoter>
+</VarDeclaration>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="y"/>
+</SimpleVname>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+</VnameExpression>
+</AssignCommand>
+</LetCommand>
+</ProcDeclaration>
+<ProcDeclaration>
+<Identifier value="x"/>
+<EmptyFormalParameterSequence/>
+<LetCommand>
+<VarDeclaration>
+<Identifier value="y"/>
+<SimpleTypeDenoter>
+<Identifier value="Integer"/>
+</SimpleTypeDenoter>
+</VarDeclaration>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="y"/>
+</SimpleVname>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+</VnameExpression>
+</AssignCommand>
+</LetCommand>
+</ProcDeclaration>
+</SequentialDeclaration>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="u"/>
+</SimpleVname>
+<CallExpression>
+<Identifier value="x"/>
+<EmptyActualParameterSequence/>
+</CallExpression>
+</AssignCommand>
+</LetCommand>
+</Program>
