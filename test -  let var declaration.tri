@@ -1,6 +1,0 @@
-!esto es un comentario
-let
-  var x : Integer
-in
-  x:=123
-end
