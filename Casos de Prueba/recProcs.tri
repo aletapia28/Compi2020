@@ -1,0 +1,19 @@
+!rec several proc declaration
+let
+rec proc x () ~ let
+  var y: Integer in
+  y := x
+  end
+end
+and
+proc x () ~ let
+  var y: Integer in
+  y := x
+  end
+end
+
+end
+
+in
+u:=x()
+end

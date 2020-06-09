@@ -1,3 +1,2 @@
-let 
- 	var x: Integer
-end
+nil
+! nil es un comando, consecuentemente un programa válido 
