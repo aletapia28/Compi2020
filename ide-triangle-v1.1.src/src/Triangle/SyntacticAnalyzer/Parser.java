@@ -811,7 +811,7 @@ public class Parser {
       acceptIt();
       Declaration d2AST = parseDeclaration(); 
       finish(declarationPos);
-      declarationAST = new SequentialDeclaration(declarationAST, d2AST, declarationPos);
+      declarationAST = new SequentialDeclaration( d2AST,declarationAST, declarationPos);
     }
     return declarationAST;
   }
@@ -864,7 +864,7 @@ public class Parser {
         accept(Token.RPAREN);
         accept(Token.IS);
         Command cAST = parseCommand();
-        accept(Token.END);
+        // accept(Token.END);
         finish(declarationPos);
         declarationAST = new ProcDeclaration(iAST, fpsAST, cAST, declarationPos);
       }
@@ -951,11 +951,12 @@ public class Parser {
   Declaration parseProcFuncs() throws SyntaxError {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
-    Declaration declarationAST = null; // in case there's a syntactic error
+    Declaration p1AST = null; // in case there's a syntactic error
 
     do{
      
-      Declaration p1AST = parseProcFunc();
+      
+      p1AST= parseProcFunc();
        if(currentToken.kind == Token.AND){
          acceptIt();
          Declaration p2AST = parseProcFunc();        
@@ -970,7 +971,7 @@ public class Parser {
     }
     while(currentToken.kind == Token.AND);
 
-    return declarationAST;
+    return p1AST;
   }
 
   ///////////////////////////////////////////////////////////////////////////////

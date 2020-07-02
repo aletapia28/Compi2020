@@ -2,14 +2,22 @@
 <Program>
 <LetCommand>
 <SequentialDeclaration>
+<SequentialDeclaration>
 <VarDeclaration>
-<Identifier value="a"/>
+<Identifier value="c"/>
 <SimpleTypeDenoter>
 <Identifier value="Integer"/>
 </SimpleTypeDenoter>
 </VarDeclaration>
 <VarDeclaration>
 <Identifier value="b"/>
+<SimpleTypeDenoter>
+<Identifier value="Integer"/>
+</SimpleTypeDenoter>
+</VarDeclaration>
+</SequentialDeclaration>
+<VarDeclaration>
+<Identifier value="a"/>
 <SimpleTypeDenoter>
 <Identifier value="Integer"/>
 </SimpleTypeDenoter>
@@ -52,14 +60,41 @@
 </VnameExpression>
 </BinaryExpression>
 <EmptyCommand/>
+<IfCommand>
+<BinaryExpression>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</VnameExpression>
+<Operator value="&lt;"/>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="c"/>
+</SimpleVname>
+</VnameExpression>
+</BinaryExpression>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="c"/>
+</SimpleVname>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="a"/>
+</SimpleVname>
+</VnameExpression>
+</AssignCommand>
 <AssignCommand>
 <SimpleVname>
 <Identifier value="a"/>
 </SimpleVname>
-<IntegerExpression>
-<IntegerLiteral value="100"/>
-</IntegerExpression>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="c"/>
+</SimpleVname>
+</VnameExpression>
 </AssignCommand>
+</IfCommand>
 </IfCommand>
 </IfCommand>
 </LetCommand>

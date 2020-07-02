@@ -1,0 +1,6 @@
+!Test let const declaration
+let
+  const x ~ true
+in
+  y := x
+end
