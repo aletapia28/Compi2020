@@ -1001,7 +1001,7 @@ public final class Checker implements Visitor {
       TypeDenoter dType = (TypeDenoter) constDec.E.visit(this, null);
       
       if(! eType.equals(StdEnvironment.integerType))
-          reporter.reportError("Expresion entera esperada aqui", "", ast.E.position);
+          reporter.reportError("Expresion entera esperada aqui", "", ast.E1.position);
       if(! dType.equals(StdEnvironment.integerType))
           reporter.reportError("Expresion entera esperada aqui", "", ast.D.position);
       
@@ -1044,6 +1044,9 @@ public final class Checker implements Visitor {
                   reporter.reportError("Variable de control no puede ser pasada por referencia aquí", "", ast.C.position);
               }
           }
+      } 
+      idTable.closeScope();
+      return null; 
               
     }
     

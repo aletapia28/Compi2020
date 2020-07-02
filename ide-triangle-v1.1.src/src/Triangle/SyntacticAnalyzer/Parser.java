@@ -96,6 +96,7 @@ import Triangle.AbstractSyntaxTrees.NextCommand;
 import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
 import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
 import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
+import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
 
 import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
 import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
@@ -952,19 +953,18 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     Declaration p1AST = null; // in case there's a syntactic error
+    p1AST=parseProcFunc();
 
     do{
-     
-      
-      p1AST= parseProcFunc();
+
        if(currentToken.kind == Token.AND){
          acceptIt();
          Declaration p2AST = parseProcFunc();        
          finish(declarationPos);
-         declarationAST = new SequentialDeclaration (p1AST, p2AST, declarationPos ); //cambiar por recursive RecursiveProcFuncsDeclaration(pAST,pAST2,declarationPos);
-         return declarationAST;
-       }
-       else{
+         p1AST = new RecProcFuncsDeclaration(p1AST, p2AST, declarationPos ); //cambiar por recursive RecursiveProcFuncsDeclaration(pAST,pAST2,declarationPos);
+         //return p1AST;
+       
+       }else{
           syntacticError("\"%\" cannot start a declaration", currentToken.spelling);
           break;
        }
