@@ -56,6 +56,8 @@ public interface Visitor {
   public abstract Object visitTypeDeclaration(TypeDeclaration ast, Object o);
   public abstract Object visitUnaryOperatorDeclaration(UnaryOperatorDeclaration ast, Object o);
   public abstract Object visitVarDeclaration(VarDeclaration ast, Object o);
+  public abstract Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration ast, Object o);
+  public abstract Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o); 
 
   public abstract Object visitInExVarDeclaration(InExVarDeclaration ast, Object o);
   public abstract Object visitCompoundDeclaration(CompoundDeclaration ast, Object o);

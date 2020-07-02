@@ -95,6 +95,7 @@ import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
 import Triangle.AbstractSyntaxTrees.NextCommand;
 import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
 import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
+import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
 
 import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
 import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
@@ -544,11 +545,9 @@ public class Parser {
       default:
         syntacticError("\"%\" cannot start a command", currentToken.spelling);
         break;
-
     }
     // default
     return commandAST;
-
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -793,7 +792,7 @@ public class Parser {
         Declaration d2AST = parseDeclaration();
         accept(Token.END);
         finish(declarationPos);
-        declarationAST = new SequentialDeclaration(d1AST,d2AST,declarationPos);
+        declarationAST = new PrivateProcFuncDeclaration(d1AST,d2AST,declarationPos);
         break;
       }
       default:
@@ -961,16 +960,13 @@ public class Parser {
          acceptIt();
          Declaration p2AST = parseProcFunc();        
          finish(declarationPos);
-         declarationAST = new SequentialDeclaration (p1AST, p2AST, declarationPos );
+         declarationAST = new SequentialDeclaration (p1AST, p2AST, declarationPos ); //cambiar por recursive RecursiveProcFuncsDeclaration(pAST,pAST2,declarationPos);
          return declarationAST;
        }
        else{
           syntacticError("\"%\" cannot start a declaration", currentToken.spelling);
           break;
-         
        }
-
-      
     }
     while(currentToken.kind == Token.AND);
 

@@ -101,6 +101,8 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.Vname;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
+import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
 
 public final class Encoder implements Visitor {
 
@@ -344,6 +346,13 @@ public final class Encoder implements Visitor {
     extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
     return new Integer(extraSize1 + extraSize2);
   }
+
+  public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration aThis, Object o) {
+    throw new UnsupportedOperationException("Not supported yet."); 
+}
+public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration aThis, Object o) {
+  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+}
 
   public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
     // just to ensure the type's representation is decided

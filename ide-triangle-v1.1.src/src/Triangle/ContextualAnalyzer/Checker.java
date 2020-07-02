@@ -13,7 +13,7 @@
  */
 
 package Triangle.ContextualAnalyzer;
-
+import Triangle.AbstractSyntaxTrees.ActualParameterSequence;
 import Triangle.ErrorReporter;
 import Triangle.StdEnvironment;
 import Triangle.AbstractSyntaxTrees.AnyTypeDenoter;
@@ -28,6 +28,7 @@ import Triangle.AbstractSyntaxTrees.CallExpression;
 import Triangle.AbstractSyntaxTrees.CharTypeDenoter;
 import Triangle.AbstractSyntaxTrees.CharacterExpression;
 import Triangle.AbstractSyntaxTrees.CharacterLiteral;
+import Triangle.AbstractSyntaxTrees.Command;
 import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
 import Triangle.AbstractSyntaxTrees.ConstActualParameter;
 import Triangle.AbstractSyntaxTrees.ConstDeclaration;
@@ -98,6 +99,8 @@ import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.SyntacticAnalyzer.SourcePosition;
+import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
+import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
 
 public final class Checker implements Visitor {
 
@@ -953,29 +956,222 @@ public final class Checker implements Visitor {
 
     @Override
     public Object visitRepeatWhileCommand(RepeatWhileCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+      if(! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError("Expresion booleana esperada aqui", "", ast.E.position);
+      ast.C.visit(this, null);
+      return null;
     }
 
     @Override
     public Object visitRepeatUntilCommand(RepeatUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+      if(! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError("Expresion booleana esperada aqui", "", ast.E.position);
+      ast.C.visit(this, null);
+      return null;
     }
 
     @Override
     public Object visitRepeatDoWhileCommand(RepeatDoWhileCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+      if(! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError("Expresion booleana esperada aqui", "", ast.E.position);
+      ast.C.visit(this, null);
+      return null;
     }
-
+    
     @Override
     public Object visitRepeatDoUntilCommand(RepeatDoUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+      if(! eType.equals(StdEnvironment.booleanType))
+          reporter.reportError("Expresion booleana esperada aqui", "", ast.E.position);
+      ast.C.visit(this, null);
+      return null;
+       
     }
-
+    // ref visitloopforistodo
     @Override
     public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      //determinar tipo de la E2
+      TypeDenoter eType = (TypeDenoter) ast.E1.visit(this, null);
+  
+      //Determinar tipo de la E1, que anteriormente es una declaracion (ternario)
+      ConstDeclaration constDec = (ConstDeclaration) ast.D; //obtener ConstDeclaration de Declaration
+      TypeDenoter dType = (TypeDenoter) constDec.E.visit(this, null);
+      
+      if(! eType.equals(StdEnvironment.integerType))
+          reporter.reportError("Expresion entera esperada aqui", "", ast.E.position);
+      if(! dType.equals(StdEnvironment.integerType))
+          reporter.reportError("Expresion entera esperada aqui", "", ast.D.position);
+      
+      idTable.openScope();
+      idTable.enter(constDec.toString(), constDec);
+      
+      Command command = ast.C;
+      
+      //Preguntar si es un LetCommand
+      if(command instanceof LetCommand){
+          Command letCommand = ((LetCommand) command).C;
+          //Preguntar si es un AssingCommand
+          if(letCommand instanceof AssignCommand){
+              //obtener nombre de la variable del let command
+              SimpleVname simpleVname = (SimpleVname)((AssignCommand) letCommand).V;
+              if(constDec.I.spelling.equals(simpleVname.I.spelling)){
+              reporter.reportError("Variable de control no puede ser asignada aquí", "", ast.C.position);
+              }
+          }
+      }
+      else if(command instanceof CallCommand){
+          ActualParameterSequence actualParameterSequence = ((CallCommand) command).APS;
+          
+          if(actualParameterSequence instanceof SingleActualParameterSequence){
+              //System.out.println("entro single 1");
+              VarActualParameter varActualParameter = (VarActualParameter) ((SingleActualParameterSequence) actualParameterSequence).AP;
+              SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
+              //System.out.println(simpleVname.I.spelling);
+              if(constDec.I.spelling.equals(simpleVname.I.spelling)){
+                  //System.out.println("entro single 2");
+                  reporter.reportError("Variable de control no puede ser pasada por referencia aquí", "", ast.C.position);
+              }
+          }
+          else if(actualParameterSequence instanceof MultipleActualParameterSequence){
+              //System.out.println("entro multiple 1");
+              VarActualParameter varActualParameter = (VarActualParameter) ((MultipleActualParameterSequence) actualParameterSequence).AP;
+              SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
+              if(constDec.I.spelling.equals(simpleVname.I.spelling)){
+                  //System.out.println("entro multiple 2");
+                  reporter.reportError("Variable de control no puede ser pasada por referencia aquí", "", ast.C.position);
+              }
+          }
+              
+    }
+    
+    @Override
+    public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration ast, Object o) {
+      idTable.openScope(); //abrir scope para usarlo unicamente en la D2
+        
+      if (ast.D1 instanceof ProcDeclaration) { // inserta D1 en la tabla
+          addIdentifierProc((ProcDeclaration) ast.D1);
+      } else {
+          addIdentifierFunc((FuncDeclaration) ast.D1);
+      }
+      
+      if (ast.D1 instanceof ProcDeclaration) {//D1 es visitado (abre y cierra scope)
+      visitProc((ProcDeclaration) ast.D1, o);
+      } else {
+      visitFunc((FuncDeclaration) ast.D1, o);
+      }
+
+      if (ast.D2 instanceof ProcDeclaration) { //D2 es visitado (abre y cierra scope) y tiene acceso a D1
+      visitProc((ProcDeclaration) ast.D2, o);
+      } else {
+      visitFunc((FuncDeclaration) ast.D2, o);
+      }
+      
+      idTable.closeScope(); //cierra el scope que el comando siguiente solo pueda usar D2 y no tenga acceso a D1
+      
+      if (ast.D2 instanceof ProcDeclaration) { // inserta D2 en el scope para ser utilizado por el siguiente comando (el siguiente comando cierra el scope mayor)
+          addIdentifierProc((ProcDeclaration) ast.D2);
+      } else {
+          addIdentifierFunc((FuncDeclaration) ast.D2);
+      }
+      return null;
+    }
+    
+    public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o){
+      //Checkear si D2 es una ProcDeclaration o FuncDeclaration para agregar identificadores al scope (idTable)
+      if (ast.D2 instanceof ProcDeclaration) {
+          addIdentifierProc((ProcDeclaration) ast.D2);
+      } else {
+          addIdentifierFunc((FuncDeclaration) ast.D2);
+      }
+      Declaration dec = (Declaration) ast.D1;
+      //D1 puede tener de 0 a n ProcFuncs
+  
+      while (dec instanceof RecProcFuncsDeclaration){
+          RecProcFuncsDeclaration pf = (RecProcFuncsDeclaration)dec;
+          // para cada ProcFuncsDeclaration agrega los identificadores de D2
+          if (pf.D2 instanceof ProcDeclaration) {
+              addIdentifierProc((ProcDeclaration) pf.D2);
+          } else {
+              addIdentifierFunc((FuncDeclaration) pf.D2);
+          }
+          dec = pf.D1; // asigna D1 para verificar si es procFuncsDeclaration otra vez
+      }
+          
+      //Checkear si D1 es una ProcDeclaration o FuncDeclaration para agregar identificadores al scope (idTable)
+      if (dec instanceof ProcDeclaration) {
+          addIdentifierProc((ProcDeclaration) dec);
+      } else {
+          addIdentifierFunc((FuncDeclaration) dec);
+      }
+      //mismo proceso, pero para visitar funciones declaradas
+      //verifica si la declaracion es Proc or Func
+      if (ast.D2 instanceof ProcDeclaration) {
+          visitProc((ProcDeclaration) ast.D2, o);
+      } else {
+          visitFunc((FuncDeclaration) ast.D2, o);
+      }
+          
+      dec = (Declaration) ast.D1;
+      while (dec instanceof RecProcFuncsDeclaration){
+          RecProcFuncsDeclaration pf = (RecProcFuncsDeclaration)dec;
+          if (pf.D2 instanceof ProcDeclaration) {
+              visitProc((ProcDeclaration) pf.D2, o);
+          } else {
+              visitFunc((FuncDeclaration) pf.D2, o);
+          }
+          dec = pf.D1;
+      }
+      if (dec instanceof ProcDeclaration) {
+          visitProc((ProcDeclaration) dec, o);
+      } else {
+          visitFunc((FuncDeclaration) dec, o);
+      }
+      return null;
     }
 
+      // funciones auxiliares para agregar identificadores en procs y funcs
+      public Object addIdentifierFunc(FuncDeclaration ast) {
+        idTable.enter (ast.I.spelling, ast); // permits recursion
+        if (ast.duplicated)
+            reporter.reportError ("func identifier \"%\" already declared",
+                    ast.I.spelling, ast.position);
+        //ast.FPS.visit(this, true);
+        ast.FPS.visit(this, true); // visit FPS without adding ident in idTable
+        ast.T = (TypeDenoter) ast.T.visit(this, null); 
+        return null;
+    }
+
+    public Object addIdentifierProc(ProcDeclaration ast) {
+        idTable.enter (ast.I.spelling, ast); // permits recursion
+        if (ast.duplicated)
+            reporter.reportError ("proc identifier \"%\" already declared",
+                            ast.I.spelling, ast.position);
+        ast.FPS.visit(this, true); // visit FPS without adding ident in idTable
+        return null;
+    }
+    public Object visitProc (ProcDeclaration ast, Object o) {
+      // almost same fucntion for visitProcDeclaration but without inserting id to idTable
+      idTable.openScope();
+      ast.FPS.visit(this, null);
+      ast.C.visit(this, null);
+      idTable.closeScope();
+      return null;
+    }
+    public Object visitFunc (FuncDeclaration ast, Object o) {
+      // almost same fucntion for visitFuncDeclaration but without inserting id to idTable
+      idTable.openScope();
+      ast.FPS.visit(this, null);
+      TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+      idTable.closeScope();
+      if (! ast.T.equals(eType))
+          reporter.reportError ("body of function \"%\" has wrong type",
+              ast.I.spelling, ast.E.position);
+      return null;
+    }
+    
     @Override
     public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -1010,4 +1206,5 @@ public final class Checker implements Visitor {
     public Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }

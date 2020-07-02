@@ -76,6 +76,8 @@ import Triangle.AbstractSyntaxTrees.VarFormalParameter;
 import Triangle.AbstractSyntaxTrees.Visitor;
 import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
+import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
+import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
 
 
 
@@ -580,8 +582,6 @@ public class WriterVisitor implements Visitor {
 
     // Implementar nuevos visitors
 
-
-    
     public Object visitRepeatWhileCommand(RepeatWhileCommand ast, Object o) {
         writeLineHTML("<RepeatWhileCommand>");
         ast.E.visit(this,null);
@@ -590,7 +590,6 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-    
     public Object visitRepeatUntilCommand(RepeatUntilCommand ast, Object o) {
         writeLineHTML("<RepeatUntilCommand>");
         ast.E.visit(this,null);
@@ -598,7 +597,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</RepeatUntilCommand>");
         return null;
     }
-
     
     public Object visitRepeatDoWhileCommand(RepeatDoWhileCommand ast, Object o) {
         writeLineHTML("<RepeatDoWhileCommand>");
@@ -607,7 +605,6 @@ public class WriterVisitor implements Visitor {
         writeLineHTML("</RepeatDoWhileCommand>");
         return null;
     }
-
     
     public Object visitRepeatDoUntilCommand(RepeatDoUntilCommand ast, Object o) {
         writeLineHTML("<RepeatDoUntilCommand>");
@@ -617,7 +614,6 @@ public class WriterVisitor implements Visitor {
         return null;
     }
 
-    
     public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
         writeLineHTML("<RepeatVarCommand>");
         ast.D.visit(this,null);
@@ -687,6 +683,22 @@ public class WriterVisitor implements Visitor {
         ast.E.visit(this,null);
         writeLineHTML("</VarExpresionDeclaration>");
         return null;
+    }
+    
+    public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration ast, Object o) {
+        writeLineHTML("<ProcFuncsDeclaration>");
+        ast.D1.visit(this, null);
+        ast.D2.visit(this, null);
+        writeLineHTML("</ProcFuncsDeclaration>");
+        return null;    
+    }
+
+    public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o) {
+        writeLineHTML("<ProcFuncsDeclaration>");
+        ast.D1.visit(this, null);
+        ast.D2.visit(this, null);
+        writeLineHTML("</ProcFuncsDeclaration>");
+        return null;    
     }
 
 }
