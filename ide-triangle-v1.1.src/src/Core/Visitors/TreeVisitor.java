@@ -83,6 +83,10 @@ import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
 import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
 import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
 import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
+import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
+import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
+import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
+
 // import Triangle.AbstractSyntaxTrees.
 //import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
 
@@ -233,6 +237,15 @@ public class TreeVisitor implements Visitor {
     public Object visitSequentialDeclaration(SequentialDeclaration ast, Object obj) {
         return (createBinary("Sequential Declaration", ast.D1, ast.D2));
     }
+    
+    public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object obj){
+        return(createBinary("RecProcFuncs Declaration", ast.D1, ast.D2));
+    }
+        
+    
+    public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration ast, Object obj) {
+        return (createBinary("PrivateProcFunc Declaration", ast.D1, ast.D2));
+    }
 
     public Object visitTypeDeclaration(TypeDeclaration ast, Object obj) {
         return (createBinary("Type Declaration", ast.I, ast.T));
@@ -255,6 +268,9 @@ public class TreeVisitor implements Visitor {
     }
     public Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object obj) {
         return (createBinary("Var Expression Declaration", ast.I, ast.E));
+    }
+     public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
+        return(createBinary("Becomes Variable Declaration", ast.I, ast.E));
     }
     // </editor-fold>
 

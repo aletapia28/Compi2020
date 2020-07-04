@@ -8,12 +8,7 @@ package Core.Console;
 import java.awt.event.ActionListener;
 import java.io.InputStream;
 
-/**
- * This class is used to redirect the console input. 
- * When the console expects for an input, an event is fired.
- *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
- */
+
 public class InputRedirector extends InputStream {
     
     // <editor-fold defaultstate="collapsed" desc=" Methods ">        

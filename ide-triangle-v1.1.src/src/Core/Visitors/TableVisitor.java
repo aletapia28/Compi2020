@@ -90,6 +90,9 @@ import Triangle.AbstractSyntaxTrees.NextCommand;
 // import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
 import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
 import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
+import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
+import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
+import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
 
 //import Triangle.AbstractSyntaxTrees.RepeatLoopCommand;
 
@@ -361,6 +364,18 @@ public class TableVisitor implements Visitor {
 
         return (null);
     }
+    public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration ast, Object o) {
+        ast.D1.visit(this, null);
+        ast.D2.visit(this, null);
+
+        return (null);
+    }
+    public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o) {
+        ast.D1.visit(this, null);
+        ast.D2.visit(this, null);
+        
+        return(null);    
+      }
 
     public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
         ast.T.visit(this, null);
@@ -409,6 +424,12 @@ public class TableVisitor implements Visitor {
         // }
         ast.I.visit(this,null);
         ast.E.visit(this, null);
+        return (null);
+    }
+      public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
+        ast.E.visit(this, null);
+        ast.I.visit(this, null);
+        
         return (null);
     }
 

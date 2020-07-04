@@ -11,12 +11,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.LinkedList;
 
-/**
- * This class is used to redirect the console output to a queue, firing an
- * event every time there is data to read.
- *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
- */
+
 public class OutputRedirector extends ByteArrayOutputStream {
       
     // <editor-fold defaultstate="collapsed" desc=" Methods ">

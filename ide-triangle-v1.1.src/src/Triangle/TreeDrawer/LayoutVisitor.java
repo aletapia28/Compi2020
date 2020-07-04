@@ -94,6 +94,9 @@ import Triangle.AbstractSyntaxTrees.RestOfIfElseCommand;
 import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
 import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
 import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
+import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
+import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
+import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
 
 public class LayoutVisitor implements Visitor {
 
@@ -262,6 +265,15 @@ public class LayoutVisitor implements Visitor {
 
   public Object visitCompoundDeclaration(CompoundDeclaration ast, Object obj) {
     return layoutBinary("Compound.Decl.", ast.D1, ast.D2);
+  }
+  public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration aThis, Object o) {
+    throw new UnsupportedOperationException("Not supported yet."); 
+  }
+  public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration aThis, Object o) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
+    return layoutBinary("Becomes Var Declaration", ast.I, ast.E);
   }
 
 

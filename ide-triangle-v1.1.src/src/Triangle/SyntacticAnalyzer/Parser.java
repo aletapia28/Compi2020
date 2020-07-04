@@ -95,6 +95,9 @@ import Triangle.AbstractSyntaxTrees.RestOfIfElsifCommand;
 import Triangle.AbstractSyntaxTrees.NextCommand;
 import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
 import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
+import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
+import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
+import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
 
 import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
 import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
@@ -328,7 +331,8 @@ public class Parser {
         accept(Token.END);
         finish(commandPos);
         commandAST = new LetCommand(dAST, cAST, commandPos);
-        break;
+        
+        
       }
       
       // Modificando caso IF 
@@ -543,11 +547,9 @@ public class Parser {
       default:
         syntacticError("\"%\" cannot start a command", currentToken.spelling);
         break;
-
     }
     // default
     return commandAST;
-
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -732,7 +734,7 @@ public class Parser {
   ///////////////////////////////////////////////////////////////////////////////
   //
   // VALUE-OR-VARIABLE NAMES
-  //
+  //Pif
   ///////////////////////////////////////////////////////////////////////////////
 
   Vname parseVname() throws SyntaxError {
@@ -792,7 +794,7 @@ public class Parser {
         Declaration d2AST = parseDeclaration();
         accept(Token.END);
         finish(declarationPos);
-        declarationAST = new SequentialDeclaration(d1AST,d2AST,declarationPos);
+        declarationAST = new PrivateProcFuncDeclaration(d1AST,d2AST,declarationPos);
         break;
       }
       default:
@@ -850,7 +852,8 @@ public class Parser {
               acceptIt();
               Expression eAST = parseExpression();
               finish(declarationPos);
-              declarationAST= new VarExpresionDeclaration(iAST, eAST, declarationPos);
+              declarationAST= new BecomesVarDeclaration(iAST, eAST, declarationPos);
+              //declarationAST= new VarExpresionDeclaration(iAST, eAST, declarationPos);
           }
          }
       }
@@ -952,19 +955,21 @@ public class Parser {
     SourcePosition declarationPos = new SourcePosition();
     start(declarationPos);
     Declaration p1AST = null; // in case there's a syntactic error
+    p1AST=parseProcFunc();
 
     do{
-     
-      
-      p1AST= parseProcFunc();
+
        if(currentToken.kind == Token.AND){
          acceptIt();
          Declaration p2AST = parseProcFunc();        
          finish(declarationPos);
-          Declaration   declarationAST = new SequentialDeclaration (p1AST, p2AST, declarationPos );
-         return declarationAST;
+         p1AST = new RecProcFuncsDeclaration(p1AST, p2AST, declarationPos ); //cambiar por recursive RecursiveProcFuncsDeclaration(pAST,pAST2,declarationPos);
+         //return p1AST;
+       
+       }else{
+          syntacticError("\"%\" cannot start a declaration", currentToken.spelling);
+          break;
        }
-     
     }
     while(currentToken.kind == Token.AND);
 
@@ -1012,6 +1017,7 @@ public class Parser {
     return formalsAST;
   }
 
+  
   FormalParameter parseFormalParameter() throws SyntaxError {
     FormalParameter formalAST = null; // in case there's a syntactic error;
 
