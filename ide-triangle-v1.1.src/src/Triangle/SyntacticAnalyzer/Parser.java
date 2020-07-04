@@ -97,6 +97,7 @@ import Triangle.AbstractSyntaxTrees.LoopIdentifierCommand;
 import Triangle.AbstractSyntaxTrees.InExVarDeclaration;
 import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
 import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
+import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
 
 import Triangle.AbstractSyntaxTrees.CompoundDeclaration;
 import Triangle.AbstractSyntaxTrees.VarExpresionDeclaration;
@@ -733,7 +734,7 @@ public class Parser {
   ///////////////////////////////////////////////////////////////////////////////
   //
   // VALUE-OR-VARIABLE NAMES
-  //
+  //Pif
   ///////////////////////////////////////////////////////////////////////////////
 
   Vname parseVname() throws SyntaxError {
@@ -851,7 +852,8 @@ public class Parser {
               acceptIt();
               Expression eAST = parseExpression();
               finish(declarationPos);
-              declarationAST= new VarExpresionDeclaration(iAST, eAST, declarationPos);
+              declarationAST= new BecomesVarDeclaration(iAST, eAST, declarationPos);
+              //declarationAST= new VarExpresionDeclaration(iAST, eAST, declarationPos);
           }
          }
       }
@@ -1015,6 +1017,7 @@ public class Parser {
     return formalsAST;
   }
 
+  
   FormalParameter parseFormalParameter() throws SyntaxError {
     FormalParameter formalAST = null; // in case there's a syntactic error;
 

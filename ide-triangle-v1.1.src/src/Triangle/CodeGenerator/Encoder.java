@@ -103,6 +103,7 @@ import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
 import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
+import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
 
 public final class Encoder implements Visitor {
 
@@ -375,6 +376,10 @@ public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration aThis, Object
     writeTableDetails(ast);
     return new Integer(extraSize);
   }
+
+   public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 
   // Array Aggregates

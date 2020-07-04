@@ -78,6 +78,7 @@ import Triangle.AbstractSyntaxTrees.VnameExpression;
 import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
 import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
+import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
 
 
 
@@ -301,6 +302,13 @@ public class WriterVisitor implements Visitor {
         ast.T.visit(this, null);
         writeLineHTML("</VarDeclaration>");
         return null;
+    }
+       public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
+    	writeLineHTML("<BecomesVarDeclaration>");
+    	ast.I.visit(this, null);
+    	ast.E.visit(this, null);
+    	writeLineHTML("</BecomesVarDeclaration>");
+    	return null;
     }
 
     // Array Aggregates

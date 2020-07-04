@@ -5,11 +5,7 @@
 
 package Core.IDE;
 
-/**
- * Just a small class to call the Triangle disassembler.
- *
- * @author Luis Leopoldo Pérez <luiperpe@ns.isi.ulatina.ac.cr>
- */
+
 public class IDEDisassembler {
     
     // <editor-fold defaultstate="collapsed" desc=" Methods ">    
