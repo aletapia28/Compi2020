@@ -101,6 +101,7 @@ import Triangle.AbstractSyntaxTrees.WhileCommand;
 import Triangle.SyntacticAnalyzer.SourcePosition;
 import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
 import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
+import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
 
 public final class Checker implements Visitor {
 
@@ -361,9 +362,11 @@ public final class Checker implements Visitor {
   public Object visitVarDeclaration(VarDeclaration ast, Object o) {
     ast.T = (TypeDenoter) ast.T.visit(this, null);
     idTable.enter (ast.I.spelling, ast);
+    
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
+                            
 
     return null;
   }
@@ -729,7 +732,12 @@ public final class Checker implements Visitor {
       } else if (binding instanceof VarFormalParameter) {
         ast.type = ((VarFormalParameter) binding).T;
         ast.variable = true;
-      } else
+      }else if (binding instanceof BecomesVarDeclaration) { //inferir I de Expresion 
+        ast.type = ((BecomesVarDeclaration) binding).E.type;
+        ast.variable = true;
+      }
+      
+      else
         reporter.reportError ("\"%\" is not a const or var identifier",
                               ast.I.spelling, ast.I.position);
     return ast.type;
@@ -990,15 +998,68 @@ public final class Checker implements Visitor {
       return null;
        
     }
-    // ref visitloopforistodo
-    @Override
+
+    // @Override
+    // public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
+    //   //determinar tipo de la Segunda expresion del VarCommand
+    //   TypeDenoter eType = (TypeDenoter) ast.E1.visit(this, null);
+  
+    //   //Determinar tipo de la E1, que anteriormente es una declaracion (ternario) D
+    //   InExVarDeclaration constDec = (InExVarDeclaration) ast.D; //obtener  InExVarDeclaration
+    //   TypeDenoter dType = (TypeDenoter) constDec.E.visit(this, null); //obtiene el tipo de E1
+      
+    //   if(! eType.equals(StdEnvironment.integerType))
+    //       reporter.reportError("Expresion entera esperada aqui", "", ast.E1.position);
+    //   if(! dType.equals(StdEnvironment.integerType))
+    //       reporter.reportError("Expresion entera esperada aqui", "", ast.D.position);
+      
+    //   idTable.openScope();
+    //   idTable.enter(constDec.toString(), constDec);
+      
+    //   Command command = ast.C;
+      
+    //   //Preguntar si es un LetCommand
+    //   if(command instanceof LetCommand){
+    //       Command letCommand = ((LetCommand) command).C;
+    //       //Preguntar si es un AssingCommand
+    //       if(letCommand instanceof AssignCommand){
+    //           //obtener nombre de la variable del let command
+    //           SimpleVname simpleVname = (SimpleVname)((AssignCommand) letCommand).V;
+    //           if(constDec.I.spelling.equals(simpleVname.I.spelling)){
+    //           reporter.reportError("Variable de control no puede ser asignada aquí", "", ast.C.position);
+    //           }
+    //       }
+    //   }
+    //   else if(command instanceof CallCommand){
+    //       ActualParameterSequence actualParameterSequence = ((CallCommand) command).APS;
+          
+    //       if(actualParameterSequence instanceof SingleActualParameterSequence){
+    //           //System.out.println("entro single 1");
+    //           VarActualParameter varActualParameter = (VarActualParameter) ((SingleActualParameterSequence) actualParameterSequence).AP;   
+    //       }
+    //       else if(actualParameterSequence instanceof MultipleActualParameterSequence){
+    //           //System.out.println("entro multiple 1");
+    //           VarActualParameter varActualParameter = (VarActualParameter) ((MultipleActualParameterSequence) actualParameterSequence).AP;
+    //       }
+    //       SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
+    //       //System.out.println(simpleVname.I.spelling);
+    //       if(constDec.I.spelling.equals(simpleVname.I.spelling)){
+    //           //System.out.println("entro single 2");
+    //           reporter.reportError("Variable de control no puede ser pasada por referencia aquí", "", ast.C.position);
+    //       }
+    //   } 
+    //   idTable.closeScope();
+    //   return null; 
+              
+    // }
+
     public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
-      //determinar tipo de la E2
+      //determinar tipo de la Segunda expresion del VarCommand
       TypeDenoter eType = (TypeDenoter) ast.E1.visit(this, null);
   
-      //Determinar tipo de la E1, que anteriormente es una declaracion (ternario)
-      ConstDeclaration constDec = (ConstDeclaration) ast.D; //obtener ConstDeclaration de Declaration
-      TypeDenoter dType = (TypeDenoter) constDec.E.visit(this, null);
+      //Determinar tipo de la E1, que anteriormente es una declaracion (ternario) D
+      InExVarDeclaration constDec = (InExVarDeclaration) ast.D; //obtener  InExVarDeclaration
+      TypeDenoter dType = (TypeDenoter) constDec.E.visit(this, null); //obtiene el tipo de E1
       
       if(! eType.equals(StdEnvironment.integerType))
           reporter.reportError("Expresion entera esperada aqui", "", ast.E1.position);
@@ -1173,6 +1234,16 @@ public final class Checker implements Visitor {
           reporter.reportError ("body of function \"%\" has wrong type",
               ast.I.spelling, ast.E.position);
       return null;
+    }
+
+     @Override
+    public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
+        //E
+        TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+        idTable.enter(ast.I.spelling, ast);
+        if (ast.duplicated)
+        reporter.reportError ("identifier \"%\" already declared", ast.I.spelling, ast.position);
+        return null;
     }
     
     @Override
