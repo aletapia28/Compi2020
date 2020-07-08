@@ -789,9 +789,9 @@ public class Parser {
       }
       case Token.PRIVATE: {
         acceptIt();
-        Declaration d1AST = parseDeclaration();
+        Declaration d1AST = parseProcFunc();
         accept(Token.IN);
-        Declaration d2AST = parseDeclaration();
+        Declaration d2AST = parseProcFunc();
         accept(Token.END);
         finish(declarationPos);
         declarationAST = new PrivateProcFuncDeclaration(d1AST,d2AST,declarationPos);
