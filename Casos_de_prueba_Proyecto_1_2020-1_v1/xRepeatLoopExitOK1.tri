@@ -1,0 +1,18 @@
+let
+  var i : Integer;
+  var n : Integer
+in
+  i := 0;
+  getint(var n);
+  repeat loop do
+    if i > n
+      then exit
+    else
+      i := i + 1;
+      putint(i);
+      puteol()
+    end
+  end
+end
+  
+! OK

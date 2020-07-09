@@ -1,0 +1,6 @@
+repeat loop infinito
+  !do
+    nil
+end
+  
+! falta el do

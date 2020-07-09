@@ -1,0 +1,44 @@
+<?xml version="1.0" standalone="yes"?>
+<Program>
+<IfCommand>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="true"/>
+</SimpleVname>
+</VnameExpression>
+<LetCommand>
+<VarDeclaration>
+<Identifier value="x"/>
+<SimpleTypeDenoter>
+<Identifier value="Integer"/>
+</SimpleTypeDenoter>
+</VarDeclaration>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+<VnameExpression>
+<SimpleVname>
+<Identifier value="true"/>
+</SimpleVname>
+</VnameExpression>
+</AssignCommand>
+</LetCommand>
+<LetCommand>
+<VarDeclaration>
+<Identifier value="x"/>
+<SimpleTypeDenoter>
+<Identifier value="Integer"/>
+</SimpleTypeDenoter>
+</VarDeclaration>
+<AssignCommand>
+<SimpleVname>
+<Identifier value="x"/>
+</SimpleVname>
+<IntegerExpression>
+<IntegerLiteral value="10"/>
+</IntegerExpression>
+</AssignCommand>
+</LetCommand>
+</IfCommand>
+</Program>
