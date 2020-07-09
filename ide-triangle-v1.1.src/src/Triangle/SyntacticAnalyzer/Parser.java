@@ -331,7 +331,7 @@ public class Parser {
         accept(Token.END);
         finish(commandPos);
         commandAST = new LetCommand(dAST, cAST, commandPos);
-        
+        break;
         
       }
       
@@ -789,9 +789,9 @@ public class Parser {
       }
       case Token.PRIVATE: {
         acceptIt();
-        Declaration d1AST = parseProcFunc();
+        Declaration d1AST = parseDeclaration();
         accept(Token.IN);
-        Declaration d2AST = parseProcFunc();
+        Declaration d2AST = parseDeclaration();
         accept(Token.END);
         finish(declarationPos);
         declarationAST = new PrivateProcFuncDeclaration(d1AST,d2AST,declarationPos);

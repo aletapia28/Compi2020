@@ -1,0 +1,12 @@
+let
+	rec
+		func doble(var i : Integer) : Integer ~
+			i*2
+		and
+		var i : Integer
+	end
+in
+	nil
+end
+
+! Error: una de las alternativas no es un proc o func
