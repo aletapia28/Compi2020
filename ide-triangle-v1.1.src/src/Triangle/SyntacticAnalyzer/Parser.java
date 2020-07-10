@@ -338,14 +338,13 @@ public class Parser {
       // Modificando caso IF 
       case Token.IF:{
         acceptIt();
-        Expression eAST = parseExpression();
+        Expression eAST = parseExpression(); //bool
         accept(Token.THEN); 
-        Command cAST = parseCommand();
+        Command cAST = parseCommand();  //rest context
         Command c2AST = parseRestOfIf();
         finish(commandPos);
         commandAST = new IfCommand(eAST, cAST, c2AST, commandPos);
         break;
-       
 
       }
 
@@ -423,8 +422,6 @@ public class Parser {
             commandAST = new RepeatVarCommand( cVarDeclaration, e2AST,cAST, commandPos); 
             break;
           }
-          
-         
         
          
         // REPEAT LOOP
@@ -450,6 +447,7 @@ public class Parser {
         //     }
       
         // }
+          
       }
         return commandAST;
     }
@@ -497,16 +495,6 @@ public class Parser {
         commandAST = new EmptyCommand(commandPos); 
         break;
       }
-      
-          case Token.SEMICOLON:
-      case Token.END:
-      case Token.ELSE:
-      case Token.IN:
-      case Token.EOT:
-
-        finish(commandPos);
-        commandAST = new EmptyCommand(commandPos);
-        break;
 
       default:
         syntacticError("\"%\" cannot start a command", currentToken.spelling);
@@ -780,7 +768,7 @@ public class Parser {
 
     switch (currentToken.kind) {
       
-      case Token.REC: {
+      case Token.REC: { // ARREGLAR REC CON CASOS DE PRUEBA PROY 1 
         acceptIt();
         declarationAST = parseProcFuncs();
         accept(Token.END);
@@ -956,7 +944,6 @@ public class Parser {
     start(declarationPos);
     Declaration p1AST = null; // in case there's a syntactic error
     p1AST=parseProcFunc();
-
     do{
 
        if(currentToken.kind == Token.AND){

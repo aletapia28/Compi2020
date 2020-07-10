@@ -138,13 +138,13 @@ public final class Checker implements Visitor {
   public Object visitEmptyCommand(EmptyCommand ast, Object o) {
     return null;
   }
-
+  //lo arreglamos aqui? 
   public Object visitIfCommand(IfCommand ast, Object o) {
     TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
     if (! eType.equals(StdEnvironment.booleanType))
       reporter.reportError("Boolean expression expected here", "", ast.E.position);
     ast.C1.visit(this, null);
-    ast.C2.visit(this, null);
+    ast.C2.visit(this, null); //restofif 
     return null;
   }
 
@@ -1110,7 +1110,8 @@ public final class Checker implements Visitor {
       return null; 
               
     }
-    
+    // HACER OPEN SCOPE PARAREC openPrivateScope()
+    // closePrivateScope()
     @Override
     public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration ast, Object o) {
       idTable.openScope(); //abrir scope para usarlo unicamente en la D2
@@ -1235,6 +1236,13 @@ public final class Checker implements Visitor {
               ast.I.spelling, ast.E.position);
       return null;
     }
+
+    //visit ifthenrestofif
+      //etype = bool visit exp
+      //com1 = visitcommand 
+      //visitrestofit = exp bool com sea visit command 
+
+      
 
      @Override
     public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
