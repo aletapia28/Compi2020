@@ -1092,7 +1092,7 @@ public final class Checker implements Visitor {
               SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
               //System.out.println(simpleVname.I.spelling);
               if(constDec.I.spelling.equals(simpleVname.I.spelling)){
-                  //System.out.println("entro single 2");
+                  System.out.println("entro single 2");
                   reporter.reportError("Variable de control no puede ser pasada por referencia aquí", "", ast.C.position);
               }
           }
@@ -1101,7 +1101,7 @@ public final class Checker implements Visitor {
               VarActualParameter varActualParameter = (VarActualParameter) ((MultipleActualParameterSequence) actualParameterSequence).AP;
               SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
               if(constDec.I.spelling.equals(simpleVname.I.spelling)){
-                  //System.out.println("entro multiple 2");
+                  System.out.println("entro multiple 2");
                   reporter.reportError("Variable de control no puede ser pasada por referencia aquí", "", ast.C.position);
               }
           }
@@ -1114,34 +1114,13 @@ public final class Checker implements Visitor {
     // closePrivateScope()
     @Override
     public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration ast, Object o) {
-      idTable.openScope(); //abrir scope para usarlo unicamente en la D2
-        
-      if (ast.D1 instanceof ProcDeclaration) { // inserta D1 en la tabla
-          addIdentifierProc((ProcDeclaration) ast.D1);
-      } else {
-          addIdentifierFunc((FuncDeclaration) ast.D1);
-      }
-      
-      if (ast.D1 instanceof ProcDeclaration) {//D1 es visitado (abre y cierra scope)
-      visitProc((ProcDeclaration) ast.D1, o);
-      } else {
-      visitFunc((FuncDeclaration) ast.D1, o);
-      }
+        idTable.openScope();
+        ast.D1.visit(this, null);
+        idTable.lessScope();
+        ast.D2.visit(this, null);
+        idTable.closeScopeLowLevel();
+        return null;
 
-      if (ast.D2 instanceof ProcDeclaration) { //D2 es visitado (abre y cierra scope) y tiene acceso a D1
-      visitProc((ProcDeclaration) ast.D2, o);
-      } else {
-      visitFunc((FuncDeclaration) ast.D2, o);
-      }
-      
-      idTable.closeScope(); //cierra el scope que el comando siguiente solo pueda usar D2 y no tenga acceso a D1
-      
-      if (ast.D2 instanceof ProcDeclaration) { // inserta D2 en el scope para ser utilizado por el siguiente comando (el siguiente comando cierra el scope mayor)
-          addIdentifierProc((ProcDeclaration) ast.D2);
-      } else {
-          addIdentifierFunc((FuncDeclaration) ast.D2);
-      }
-      return null;
     }
     
     public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o){
@@ -1200,6 +1179,8 @@ public final class Checker implements Visitor {
       // funciones auxiliares para agregar identificadores en procs y funcs
       public Object addIdentifierFunc(FuncDeclaration ast) {
         idTable.enter (ast.I.spelling, ast); // permits recursion
+        System.out.print("ast.I");
+        System.out.print(idTable.retrieve(ast.I.spelling));
         if (ast.duplicated)
             reporter.reportError ("func identifier \"%\" already declared",
                     ast.I.spelling, ast.position);
@@ -1237,16 +1218,8 @@ public final class Checker implements Visitor {
       return null;
     }
 
-    //visit ifthenrestofif
-      //etype = bool visit exp
-      //com1 = visitcommand 
-      //visitrestofit = exp bool com sea visit command 
-
-      
-
      @Override
     public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
-        //E
         TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
         idTable.enter(ast.I.spelling, ast);
         if (ast.duplicated)
