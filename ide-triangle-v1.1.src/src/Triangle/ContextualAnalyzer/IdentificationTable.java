@@ -33,6 +33,11 @@ public final class IdentificationTable {
 
     level ++;
   }
+  
+  // Se agrega este método para reducir el nivel en el que se encuentra
+  public void lessScope(){
+      level --;
+  }
 
   // Closes the topmost level in the identification table, discarding
   // all entries belonging to that level.
@@ -49,6 +54,23 @@ public final class IdentificationTable {
     }
     this.level--;
     this.latest = entry;
+  }
+  
+   // Este método busca las declaraciones de un nivel superior
+  public void closeScopeLowLevel(){
+    IdEntry entry,local,local2;
+    local=null;
+    entry = this.latest;
+    while (entry.level == this.level) {
+      local = entry;
+      entry = local.previous;
+    }
+    //Se busca el primer elemento del nivel más profundo
+    while (entry.level == this.level + 1) {
+      local2 = entry;
+      entry = local2.previous;
+    }
+    local.previous = entry;
   }
 
   // Makes a new entry in the identification table for the given identifier
