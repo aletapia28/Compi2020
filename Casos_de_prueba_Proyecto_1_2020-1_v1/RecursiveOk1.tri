@@ -1,12 +1,15 @@
 let
 	rec
-		func doble(var i : Integer) : Integer ~
-			triplicar(i)/3*2
-		and
 		proc triplicar(var i : Integer) ~
 			i := i + doble(i)
 		end
+		and	
+		func doble(var i : Integer) : Integer ~
+			triplicar(i)/3*2
+		
+	
 		and
+
 		proc duplicar(var i : Integer) ~
 			i := doble(i)
 		end

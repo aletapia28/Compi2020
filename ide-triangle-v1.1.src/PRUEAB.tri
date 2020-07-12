@@ -1,0 +1,17 @@
+! Revisa las declaraciones mutuamente recursivas
+
+let
+
+rec
+
+  proc a() ~ put('Z') end ! tiene el end
+  and
+  func m(): Integer ~ 10
+
+end
+
+
+in
+  putint (1) ! imprime 1
+end    ! Revisa las declaraciones mutuamente recursivas
+

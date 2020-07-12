@@ -1,0 +1,11 @@
+let
+  var x : Integer
+in begin
+  getint (var x);
+  if x // 2 = 0 then
+    put('P')
+  else
+    put('I')
+  ;
+  puteol()
+end

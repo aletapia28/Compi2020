@@ -946,17 +946,19 @@ public class Parser {
     p1AST=parseProcFunc();
     do{
 
-       if(currentToken.kind == Token.AND){
-         acceptIt();
+      // quitar este if porque no tiene sentido
+      
+      //  if(currentToken.kind == Token.AND){
+         accept(Token.AND);
          Declaration p2AST = parseProcFunc();        
          finish(declarationPos);
          p1AST = new RecProcFuncsDeclaration(p1AST, p2AST, declarationPos ); //cambiar por recursive RecursiveProcFuncsDeclaration(pAST,pAST2,declarationPos);
          //return p1AST;
        
-       }else{
-          syntacticError("\"%\" cannot start a declaration", currentToken.spelling);
-          break;
-       }
+      //  }else{
+      //     syntacticError("\"%\" cannot start a declaration", currentToken.spelling);
+      //     break;
+      //  }
     }
     while(currentToken.kind == Token.AND);
 

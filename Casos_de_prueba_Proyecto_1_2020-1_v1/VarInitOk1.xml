@@ -5,9 +5,7 @@
 <SequentialDeclaration>
 <VarDeclaration>
 <Identifier value="y"/>
-<SimpleTypeDenoter>
-<Identifier value="Integer"/>
-</SimpleTypeDenoter>
+<IntTypeDenoter/>
 </VarDeclaration>
 <BecomesVarDeclaration>
 <Identifier value="i"/>

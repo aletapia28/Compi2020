@@ -1,0 +1,25 @@
+! Test de if then else end command, debe compilar
+
+
+
+if true then
+
+    let
+
+        var x : Integer in
+
+        x := 123
+
+    end
+
+else 
+
+    let
+
+	var x : Integer in
+
+	x := 10
+
+    end
+
+end

@@ -9,17 +9,15 @@
 <LetCommand>
 <VarDeclaration>
 <Identifier value="x"/>
-<BoolTypeDenoter/>
+<IntTypeDenoter/>
 </VarDeclaration>
 <AssignCommand>
 <SimpleVname>
 <Identifier value="x"/>
 </SimpleVname>
-<VnameExpression>
-<SimpleVname>
-<Identifier value="true"/>
-</SimpleVname>
-</VnameExpression>
+<IntegerExpression>
+<IntegerLiteral value="12"/>
+</IntegerExpression>
 </AssignCommand>
 </LetCommand>
 <LetCommand>

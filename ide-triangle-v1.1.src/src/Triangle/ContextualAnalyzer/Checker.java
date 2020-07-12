@@ -312,24 +312,52 @@ public final class Checker implements Visitor {
     return null;
   }
 
-  public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
-    ast.T = (TypeDenoter) ast.T.visit(this, null);
-    idTable.enter (ast.I.spelling, ast); // permits recursion
-    if (ast.duplicated)
-      reporter.reportError ("identifier \"%\" already declared",
-                            ast.I.spelling, ast.position);
-    idTable.openScope();
-    ast.FPS.visit(this, null);
-    TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
-    idTable.closeScope();
-    if (! ast.T.equals(eType))
-      reporter.reportError ("body of function \"%\" has wrong type",
-                            ast.I.spelling, ast.E.position);
-    return null;
-  }
-
+ public Object visitFuncDeclarationpf(FuncDeclaration ast, Object o) {
+   ast.T = (TypeDenoter) ast.T.visit(this, null);
+   idTable.enter (ast.I.spelling, ast); // permits recursion
+   if (ast.duplicated)
+     reporter.reportError ("identifier \"%\" already declared",
+                           ast.I.spelling, ast.position);
+   idTable.openScope();
+   ast.FPS.visit(this, null);
+   TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+   idTable.closeScope();
+   if (! ast.T.equals(eType))
+     reporter.reportError ("body of function \"%\" has wrong type",
+                           ast.I.spelling, ast.E.position);
+   return null;
+ }
+public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
+        if((boolean)o){
+            idTable.enter(ast.I.spelling, ast); // permits recursion
+            if (ast.duplicated) {
+                reporter.reportError("identifier \"%\" already declared",
+                        ast.I.spelling, ast.position);
+            }
+            ast.T = (TypeDenoter) ast.T.visit(this, null);
+            idTable.openScope();
+            ast.FPS.visit(this, null);
+            TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+            idTable.closeScope();
+            if (!ast.T.equals(eType)) {
+                reporter.reportError("body of function \"%\" has wrong type",
+                        ast.I.spelling, ast.E.position);
+            }
+        }else{
+            ast.T = (TypeDenoter) ast.T.visit(this, null);
+            idTable.openScope();
+            ast.FPS.visit(this, null);
+            TypeDenoter eType = (TypeDenoter) ast.E.visit(this, null);
+            idTable.closeScope();
+            if (!ast.T.equals(eType)) {
+                reporter.reportError("body of function \"%\" has wrong type",
+                        ast.I.spelling, ast.E.position);
+            }
+        }
+        return null;
+    }
   public Object visitProcDeclaration(ProcDeclaration ast, Object o) {
-    idTable.enter (ast.I.spelling, ast); // permits recursion
+    idTable.enter(ast.I.spelling, ast); // permits recursion
     if (ast.duplicated)
       reporter.reportError ("identifier \"%\" already declared",
                             ast.I.spelling, ast.position);
@@ -339,6 +367,25 @@ public final class Checker implements Visitor {
     idTable.closeScope();
     return null;
   }
+
+  public Object visitProcDeclarationpf(ProcDeclaration ast, Object o) {
+    if((boolean)o){
+        idTable.enter(ast.I.spelling, ast); // permits recursion
+        if (ast.duplicated) {
+            reporter.reportError("identifier \"%\" already declared",
+                    ast.I.spelling, ast.position);
+        }
+        idTable.openScope();
+        ast.FPS.visit(this, null);
+        idTable.closeScope();
+    }else{
+        idTable.openScope();
+        ast.FPS.visit(this, null);
+        ast.C.visit(this, null);
+        idTable.closeScope();
+    }
+    return null;
+}
 
   public Object visitSequentialDeclaration(SequentialDeclaration ast, Object o) {
     ast.D1.visit(this, null);
@@ -1124,56 +1171,71 @@ public final class Checker implements Visitor {
     }
     
     public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o){
-      //Checkear si D2 es una ProcDeclaration o FuncDeclaration para agregar identificadores al scope (idTable)
-      if (ast.D2 instanceof ProcDeclaration) {
-          addIdentifierProc((ProcDeclaration) ast.D2);
-      } else {
-          addIdentifierFunc((FuncDeclaration) ast.D2);
+
+      ast.D2.visit(this, true);
+        
+      if (ast.D1 instanceof ProcDeclaration || ast.D1 instanceof FuncDeclaration ){
+          ast.D1.visit(this, true);
       }
-      Declaration dec = (Declaration) ast.D1;
-      //D1 puede tener de 0 a n ProcFuncs
-  
-      while (dec instanceof RecProcFuncsDeclaration){
-          RecProcFuncsDeclaration pf = (RecProcFuncsDeclaration)dec;
-          // para cada ProcFuncsDeclaration agrega los identificadores de D2
-          if (pf.D2 instanceof ProcDeclaration) {
-              addIdentifierProc((ProcDeclaration) pf.D2);
-          } else {
-              addIdentifierFunc((FuncDeclaration) pf.D2);
-          }
-          dec = pf.D1; // asigna D1 para verificar si es procFuncsDeclaration otra vez
-      }
-          
-      //Checkear si D1 es una ProcDeclaration o FuncDeclaration para agregar identificadores al scope (idTable)
-      if (dec instanceof ProcDeclaration) {
-          addIdentifierProc((ProcDeclaration) dec);
-      } else {
-          addIdentifierFunc((FuncDeclaration) dec);
-      }
-      //mismo proceso, pero para visitar funciones declaradas
-      //verifica si la declaracion es Proc or Func
-      if (ast.D2 instanceof ProcDeclaration) {
-          visitProc((ProcDeclaration) ast.D2, o);
-      } else {
-          visitFunc((FuncDeclaration) ast.D2, o);
-      }
-          
-      dec = (Declaration) ast.D1;
-      while (dec instanceof RecProcFuncsDeclaration){
-          RecProcFuncsDeclaration pf = (RecProcFuncsDeclaration)dec;
-          if (pf.D2 instanceof ProcDeclaration) {
-              visitProc((ProcDeclaration) pf.D2, o);
-          } else {
-              visitFunc((FuncDeclaration) pf.D2, o);
-          }
-          dec = pf.D1;
-      }
-      if (dec instanceof ProcDeclaration) {
-          visitProc((ProcDeclaration) dec, o);
-      } else {
-          visitFunc((FuncDeclaration) dec, o);
-      }
+      
+      ast.D1.visit(this, false);
+      ast.D2.visit(this, false);
+      
       return null;
+
+
+
+
+      // //Checkear si D2 es una ProcDeclaration o FuncDeclaration para agregar identificadores al scope (idTable)
+      // if (ast.D2 instanceof ProcDeclaration) {
+      //     addIdentifierProc((ProcDeclaration) ast.D2);
+      // } else {
+      //     addIdentifierFunc((FuncDeclaration) ast.D2);
+      // }
+      // Declaration dec = (Declaration) ast.D1;
+      // //D1 puede tener de 0 a n ProcFuncs
+  
+      // while (dec instanceof RecProcFuncsDeclaration){
+      //     RecProcFuncsDeclaration pf = (RecProcFuncsDeclaration)dec;
+      //     // para cada ProcFuncsDeclaration agrega los identificadores de D2
+      //     if (pf.D2 instanceof ProcDeclaration) {
+      //         addIdentifierProc((ProcDeclaration) pf.D2);
+      //     } else {
+      //         addIdentifierFunc((FuncDeclaration) pf.D2);
+      //     }
+      //     dec = pf.D1; // asigna D1 para verificar si es procFuncsDeclaration otra vez
+      // }
+          
+      // //Checkear si D1 es una ProcDeclaration o FuncDeclaration para agregar identificadores al scope (idTable)
+      // if (dec instanceof ProcDeclaration) {
+      //     addIdentifierProc((ProcDeclaration) dec);
+      // } else {
+      //     addIdentifierFunc((FuncDeclaration) dec);
+      // }
+      // //mismo proceso, pero para visitar funciones declaradas
+      // //verifica si la declaracion es Proc or Func
+      // if (ast.D2 instanceof ProcDeclaration) {
+      //     visitProc((ProcDeclaration) ast.D2, o);
+      // } else {
+      //     visitFunc((FuncDeclaration) ast.D2, o);
+      // }
+          
+      // dec = (Declaration) ast.D1;
+      // while (dec instanceof RecProcFuncsDeclaration){
+      //     RecProcFuncsDeclaration pf = (RecProcFuncsDeclaration)dec;
+      //     if (pf.D2 instanceof ProcDeclaration) {
+      //         visitProc((ProcDeclaration) pf.D2, o);
+      //     } else {
+      //         visitFunc((FuncDeclaration) pf.D2, o);
+      //     }
+      //     dec = pf.D1;
+      // }
+      // if (dec instanceof ProcDeclaration) {
+      //     visitProc((ProcDeclaration) dec, o);
+      // } else {
+      //     visitFunc((FuncDeclaration) dec, o);
+      // }
+      // return null;
     }
 
       // funciones auxiliares para agregar identificadores en procs y funcs
