@@ -312,7 +312,7 @@ public final class Checker implements Visitor {
     return null;
   }
 
- public Object visitFuncDeclarationpf(FuncDeclaration ast, Object o) {
+ public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
    ast.T = (TypeDenoter) ast.T.visit(this, null);
    idTable.enter (ast.I.spelling, ast); // permits recursion
    if (ast.duplicated)
@@ -327,7 +327,7 @@ public final class Checker implements Visitor {
                            ast.I.spelling, ast.E.position);
    return null;
  }
-public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
+public Object visitFuncDeclarationpf(FuncDeclaration ast, Object o) {
         if((boolean)o){
             idTable.enter(ast.I.spelling, ast); // permits recursion
             if (ast.duplicated) {
@@ -1046,60 +1046,6 @@ public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
        
     }
 
-    // @Override
-    // public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
-    //   //determinar tipo de la Segunda expresion del VarCommand
-    //   TypeDenoter eType = (TypeDenoter) ast.E1.visit(this, null);
-  
-    //   //Determinar tipo de la E1, que anteriormente es una declaracion (ternario) D
-    //   InExVarDeclaration constDec = (InExVarDeclaration) ast.D; //obtener  InExVarDeclaration
-    //   TypeDenoter dType = (TypeDenoter) constDec.E.visit(this, null); //obtiene el tipo de E1
-      
-    //   if(! eType.equals(StdEnvironment.integerType))
-    //       reporter.reportError("Expresion entera esperada aqui", "", ast.E1.position);
-    //   if(! dType.equals(StdEnvironment.integerType))
-    //       reporter.reportError("Expresion entera esperada aqui", "", ast.D.position);
-      
-    //   idTable.openScope();
-    //   idTable.enter(constDec.toString(), constDec);
-      
-    //   Command command = ast.C;
-      
-    //   //Preguntar si es un LetCommand
-    //   if(command instanceof LetCommand){
-    //       Command letCommand = ((LetCommand) command).C;
-    //       //Preguntar si es un AssingCommand
-    //       if(letCommand instanceof AssignCommand){
-    //           //obtener nombre de la variable del let command
-    //           SimpleVname simpleVname = (SimpleVname)((AssignCommand) letCommand).V;
-    //           if(constDec.I.spelling.equals(simpleVname.I.spelling)){
-    //           reporter.reportError("Variable de control no puede ser asignada aquí", "", ast.C.position);
-    //           }
-    //       }
-    //   }
-    //   else if(command instanceof CallCommand){
-    //       ActualParameterSequence actualParameterSequence = ((CallCommand) command).APS;
-          
-    //       if(actualParameterSequence instanceof SingleActualParameterSequence){
-    //           //System.out.println("entro single 1");
-    //           VarActualParameter varActualParameter = (VarActualParameter) ((SingleActualParameterSequence) actualParameterSequence).AP;   
-    //       }
-    //       else if(actualParameterSequence instanceof MultipleActualParameterSequence){
-    //           //System.out.println("entro multiple 1");
-    //           VarActualParameter varActualParameter = (VarActualParameter) ((MultipleActualParameterSequence) actualParameterSequence).AP;
-    //       }
-    //       SimpleVname simpleVname = (SimpleVname) varActualParameter.V;
-    //       //System.out.println(simpleVname.I.spelling);
-    //       if(constDec.I.spelling.equals(simpleVname.I.spelling)){
-    //           //System.out.println("entro single 2");
-    //           reporter.reportError("Variable de control no puede ser pasada por referencia aquí", "", ast.C.position);
-    //       }
-    //   } 
-    //   idTable.closeScope();
-    //   return null; 
-              
-    // }
-
     public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
       //determinar tipo de la Segunda expresion del VarCommand
       TypeDenoter eType = (TypeDenoter) ast.E1.visit(this, null);
@@ -1171,71 +1117,13 @@ public Object visitFuncDeclaration(FuncDeclaration ast, Object o) {
     }
     
     public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o){
-
-      ast.D2.visit(this, true);
         
-      if (ast.D1 instanceof ProcDeclaration || ast.D1 instanceof FuncDeclaration ){
-          ast.D1.visit(this, true);
-      }
-      
       ast.D1.visit(this, false);
       ast.D2.visit(this, false);
       
       return null;
 
 
-
-
-      // //Checkear si D2 es una ProcDeclaration o FuncDeclaration para agregar identificadores al scope (idTable)
-      // if (ast.D2 instanceof ProcDeclaration) {
-      //     addIdentifierProc((ProcDeclaration) ast.D2);
-      // } else {
-      //     addIdentifierFunc((FuncDeclaration) ast.D2);
-      // }
-      // Declaration dec = (Declaration) ast.D1;
-      // //D1 puede tener de 0 a n ProcFuncs
-  
-      // while (dec instanceof RecProcFuncsDeclaration){
-      //     RecProcFuncsDeclaration pf = (RecProcFuncsDeclaration)dec;
-      //     // para cada ProcFuncsDeclaration agrega los identificadores de D2
-      //     if (pf.D2 instanceof ProcDeclaration) {
-      //         addIdentifierProc((ProcDeclaration) pf.D2);
-      //     } else {
-      //         addIdentifierFunc((FuncDeclaration) pf.D2);
-      //     }
-      //     dec = pf.D1; // asigna D1 para verificar si es procFuncsDeclaration otra vez
-      // }
-          
-      // //Checkear si D1 es una ProcDeclaration o FuncDeclaration para agregar identificadores al scope (idTable)
-      // if (dec instanceof ProcDeclaration) {
-      //     addIdentifierProc((ProcDeclaration) dec);
-      // } else {
-      //     addIdentifierFunc((FuncDeclaration) dec);
-      // }
-      // //mismo proceso, pero para visitar funciones declaradas
-      // //verifica si la declaracion es Proc or Func
-      // if (ast.D2 instanceof ProcDeclaration) {
-      //     visitProc((ProcDeclaration) ast.D2, o);
-      // } else {
-      //     visitFunc((FuncDeclaration) ast.D2, o);
-      // }
-          
-      // dec = (Declaration) ast.D1;
-      // while (dec instanceof RecProcFuncsDeclaration){
-      //     RecProcFuncsDeclaration pf = (RecProcFuncsDeclaration)dec;
-      //     if (pf.D2 instanceof ProcDeclaration) {
-      //         visitProc((ProcDeclaration) pf.D2, o);
-      //     } else {
-      //         visitFunc((FuncDeclaration) pf.D2, o);
-      //     }
-      //     dec = pf.D1;
-      // }
-      // if (dec instanceof ProcDeclaration) {
-      //     visitProc((ProcDeclaration) dec, o);
-      // } else {
-      //     visitFunc((FuncDeclaration) dec, o);
-      // }
-      // return null;
     }
 
       // funciones auxiliares para agregar identificadores en procs y funcs
