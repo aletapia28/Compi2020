@@ -105,6 +105,7 @@ import Triangle.AbstractSyntaxTrees.PrivateProcFuncDeclaration;
 import Triangle.AbstractSyntaxTrees.RecProcFuncsDeclaration;
 import Triangle.AbstractSyntaxTrees.BecomesVarDeclaration;
 
+
 public final class Encoder implements Visitor {
 
 
@@ -125,6 +126,8 @@ public final class Encoder implements Visitor {
   }
 
   public Object visitEmptyCommand(EmptyCommand ast, Object o) {
+    //nueva implementacion 
+    emit(Machine.HALTop, 0, 0, 0);
     return null;
   }
 
@@ -348,11 +351,25 @@ public final class Encoder implements Visitor {
     return new Integer(extraSize1 + extraSize2);
   }
 
-  public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration aThis, Object o) {
-    throw new UnsupportedOperationException("Not supported yet."); 
-}
-public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration aThis, Object o) {
-  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public Object visitPrivateProcFuncDeclaration(PrivateProcFuncDeclaration ast, Object o) {
+          //nueva implementacion 
+        Frame frame = (Frame) o;
+        int extraSize, extraSize2;
+        extraSize = ((Integer) ast. D1.visit(this, frame)).intValue(); // Debe retornar el espacio extra asignado por declaracion
+        Frame frame2 =  new Frame(frame, extraSize);
+        extraSize2 = ((Integer) ast.D2.visit(this, frame2)).intValue(); 
+        return new Integer(extraSize + extraSize2); // Debe retonar el espacio extra asignado por declaracion.
+
+  }
+public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o) {
+    //nueva implementacion 
+    Frame frame = (Frame) o;
+    int extraSize1, extraSize2;
+    extraSize1 = ((Integer) ast.D1.visit(this, frame)).intValue();
+    Frame frame1 = new Frame(frame, extraSize1);
+    extraSize2 = ((Integer) ast.D2.visit(this, frame1)).intValue();
+    return new Integer(extraSize1 + extraSize2);
+  
 }
 
   public Object visitTypeDeclaration(TypeDeclaration ast, Object o) {
@@ -378,8 +395,14 @@ public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration aThis, Object
   }
 
    public Object visitBecomesVarDeclaration(BecomesVarDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+       //nueva implementacion 
+        Frame frame = (Frame) o;
+        int extraSize = (Integer) ast.E.visit(this, frame); // aumenta nivel y tama�o
+        ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size); // se usa frame
+        writeTableDetails(ast);
+        return new Integer(extraSize);
+       
+   }
 
 
   // Array Aggregates
@@ -1029,23 +1052,69 @@ public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration aThis, Object
 
     @Override
     public Object visitRepeatUntilCommand(RepeatUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //nueva implementacion
+        Frame frame = (Frame) o;                        
+        int jumpAddr, repeatAddr;
+        jumpAddr = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0); 
+        repeatAddr = nextInstrAddr; 
+        ast.C.visit(this, frame);
+        patch(jumpAddr, nextInstrAddr);
+        ast.E.visit(this, frame); 
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, repeatAddr);
+        return null;
+   
     }
 
     @Override
     public Object visitRepeatDoWhileCommand(RepeatDoWhileCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //nueva implementacion
+        Frame frame = (Frame) o;
+        int loopAddr;
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        ast.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
+        return null;
     }
 
     @Override
     public Object visitRepeatDoUntilCommand(RepeatDoUntilCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //implementacion nueva 
+        Frame frame = (Frame) o;
+        int loopAddr;
+        loopAddr = nextInstrAddr;
+        ast.C.visit(this, frame);
+        ast.E.visit(this, frame);
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, loopAddr); //false
+        return null;
+        
     }
 
     @Override
     public Object visitRepeatVarCommand(RepeatVarCommand ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //implementacion nueva 
+        Frame frame = (Frame) o;
+        int repetir, jumpComparar, varControl, extraSize1, extraSize2;
+        extraSize1 = (Integer) ast.E1.visit(this, frame); // obtener valor del l?mite superior
+        Frame frame1 = new Frame (frame, extraSize1);    
+        varControl = nextInstrAddr;
+        extraSize2 = (Integer) ast.D.visit(this, frame1);
+         // obtener el valor inicial de la variable de control
+        jumpComparar = nextInstrAddr;  // Ya tengo las 2 variables de control y las quiero comparar  
+        emit(Machine.JUMPop, 0, Machine.CBr, 0); // Por lo que guardo la direccion para patchear con la instruccion de comparar que aun no conozco
+        Frame frame2 = new Frame (frame, extraSize2 + extraSize1);
+        repetir = nextInstrAddr; // Etiqueta repeptir
+        ast.C.visit(this, frame2);
+        emit(Machine.CALLop, varControl, Machine.PBr, Machine.succDisplacement); // succ incrementa en 1 lo que est? en la cima de la pila
+        patch(jumpComparar, nextInstrAddr); // Ya conozco la forma de comparar, por lo que patcheo con la direccion anterior
+        emit(Machine.LOADop, extraSize1 + extraSize2, Machine.STr, -2); // cargar simult?neamente Id y $Sup
+        emit(Machine.CALLop, Machine.SBr, Machine.PBr, Machine.geDisplacement); // comparar si el l?mite superior es mayor o igual a la variable de control
+        emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, repetir); // seguir con la repetici?n si la variable de control es menor o igual que el l?mite superior, de lo contrario salir (seguir hacia abajo)
+        emit(Machine.POPop, 0, 0, extraSize1 + extraSize2); // limpiar el espacio de almacenamiento para la variable de control y el l?mite superior (2 palabras)
+        return null;
     }
+        
 
     @Override
     public Object visitRestOfIfElseCommand(RestOfIfElseCommand ast, Object o) {
@@ -1069,7 +1138,12 @@ public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration aThis, Object
 
     @Override
     public Object visitInExVarDeclaration(InExVarDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //nueva implementacion 
+        Frame frame = (Frame) o;
+        int extraSize = (Integer) ast.E.visit(this, frame); // aumenta nivel y tama�o
+        ast.entity = new KnownAddress(Machine.addressSize, frame.level, frame.size); // se usa frame
+        writeTableDetails(ast);
+        return new Integer(extraSize);
     }
 
     @Override
