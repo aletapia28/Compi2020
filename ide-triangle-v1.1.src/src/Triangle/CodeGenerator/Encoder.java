@@ -174,6 +174,8 @@ public final class Encoder implements Visitor {
     ast.E.visit(this, frame);
     emit(Machine.JUMPIFop, Machine.trueRep, Machine.CBr, loopAddr);
     return null;
+    
+    
   }
 
 
@@ -1153,6 +1155,18 @@ public Object visitRecProcFuncsDeclaration(RecProcFuncsDeclaration ast, Object o
 
     @Override
     public Object visitVarExpresionDeclaration(VarExpresionDeclaration ast, Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //nueva implementacion
+        Frame frame = (Frame) o;                        
+        int jumpAddr, repeatAddr;
+        jumpAddr = nextInstrAddr;
+        emit(Machine.JUMPop, 0, Machine.CBr, 0); 
+        repeatAddr = nextInstrAddr; 
+        ast.I.visit(this, frame);
+        patch(jumpAddr, nextInstrAddr);
+        ast.E.visit(this, frame); 
+        emit(Machine.JUMPIFop, Machine.falseRep, Machine.CBr, repeatAddr);
+        return null;
+        
     }
+        
 }

@@ -1,0 +1,8 @@
+! la variable inicializada es reconocida
+let
+  var n := 1
+in
+
+  putint(n)
+
+end

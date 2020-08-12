@@ -1,0 +1,24 @@
+! Nombre de función repetido
+
+
+let
+
+  rec
+
+    func f (): Integer ~ 1
+
+    and
+
+    func g (b : Integer): Integer ~ 3
+
+    and
+
+    func f (a : Integer): Integer ~ 2
+
+  end
+
+in
+
+  putint(f(10)) ! aquí también habría alguna dificultad
+
+end

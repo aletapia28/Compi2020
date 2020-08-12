@@ -1,0 +1,28 @@
+let
+  var i : Integer;
+  var n : Integer;
+  const m ~ 8;
+  const d ~ 10
+in
+  i := 0;
+  getint(var n);
+  repeat loop ciclo do
+    if i > n then
+      exit ciclo
+    elsif i // d = 0 then
+      put('d');
+      puteol();
+      putint(i);
+      puteol();
+      i := i + 1;
+      next
+    else
+      nil
+    end;
+    i := i + m;
+    putint(i);
+    puteol()
+  end
+end
+  
+! OK

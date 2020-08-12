@@ -1,5 +1,0 @@
-let
-  type t ~ Integer
-in
-  y := t
-end

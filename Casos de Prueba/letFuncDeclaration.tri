@@ -1,9 +1,0 @@
-!let func declaration
-let
-func x () : Integer ~ true
-in
-let
-  var y: Integer in
-  y := x
-end
-end

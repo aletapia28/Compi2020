@@ -1,0 +1,15 @@
+let
+
+  var k := 5
+
+in
+
+  repeat var i in 1 to k do ! determinar que k se evalúa una sola vez
+
+    k := k + 1 ; 
+
+    putint (1) ! debe imprimir 5 unos
+
+  end
+
+end

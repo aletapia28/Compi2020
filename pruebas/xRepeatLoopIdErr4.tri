@@ -1,6 +1,0 @@
-repeat loop infinito
-  do
-    ! dejó vacío el comando, debería ser nil u otro comando
-end
-  
-! falta el comando

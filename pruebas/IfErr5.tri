@@ -1,3 +1,0 @@
-if 1=1 then puteol() elsif 2=2 put('2') else puteol() end
-
-! Error: Falta el then del elsif
